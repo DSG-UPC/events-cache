@@ -17,3 +17,6 @@ You can connect from pgadmin to postgres using these parameters:
 - port: 5432
 - user: postgres
 - password: postgres
+
+# Reinstalling database
+Remember to run `docker-compose build` if you modify setup.sh.
