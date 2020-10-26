@@ -1,6 +1,6 @@
 const ethers = require ("ethers");
 const Network = require("./contracts/network.json");
-// const db = require("./db");
+const db = require("./db");
 
 const provider = new ethers.providers.JsonRpcProvider(Network.development.url);
 const stampProofs = new ethers.Contract(
@@ -12,19 +12,19 @@ const stampProofs = new ethers.Contract(
 const addEventToCache = async (event : Events, data : any) => {
     switch (event) {
         case Events.stampProof:
-            console.log(data.id + ": " + data.hash + " (timestamp: " + data.timestamp + ")");
-            // try {
-            //     db.query(
-            //         "INSERT INTO stamps VALUES($1, $2, $3)",
-            //         [data.id, data.hash, data.timestamp],
-            //         (err, res) => {
-            //             if (err) console.log(err);
-            //         }
-            //     );
-            // } catch (e) {
-            //     console.log("error: ", e);
-            // }
-            // break
+            console.log(data.id + ": " + data.hash);
+            try {
+                await db.query(
+                    "INSERT INTO stamps VALUES($1, $2, $3)",
+                    [data.id, data.hash, data.timestamp],
+                    (err: unknown, res: unknown) => {
+                        if (err) console.error(`Couldn't insert ${data.id} into DB`);
+                    }
+                );
+            } catch (e) {
+                console.log("error: ", e);
+            }
+            break
     }
 };
 
@@ -39,7 +39,7 @@ enum Events {
     recycleProof = "recycleProof", 
 }
 
-stampProofs.on("stampProof", async (id : any, hash : any, timestamp : any) => {
+stampProofs.on(Events.stampProof, async (id : any, hash : any, timestamp : any) => {
     addEventToCache(Events.stampProof, {
         id: Number(id),
         hash: hash.slice(2),
