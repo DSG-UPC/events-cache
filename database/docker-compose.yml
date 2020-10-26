@@ -1,0 +1,30 @@
+# Use postgres/example user/password credentials
+version: '3.1'
+
+services:
+
+  db:
+    build: ./postgres/
+    restart: always
+    ports:
+     - "127.0.0.1:5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    networks:
+      - postgres   
+
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: always
+    ports:
+            - "127.0.0.1:8000:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: 'pgadmin@gmail.com'
+      PGADMIN_DEFAULT_PASSWORD: 'pgadmin'
+    networks:
+      - postgres   
+
+networks:
+  postgres:
+    driver: bridge
