@@ -27,9 +27,9 @@ psql -d $DB -c "CREATE TABLE Users (
     );"
 
 psql -d $DB -c "CREATE TABLE UserRecycledDevice (
-        id          integer PRIMARY KEY,
-        userAddress        varchar(42),
-        deviceAddress      varchar(42),
+        id              SERIAL PRIMARY KEY,
+        userAddress     varchar(42),
+        deviceAddress   varchar(42),
         FOREIGN KEY (userAddress) REFERENCES Users(address),
         FOREIGN KEY (deviceAddress) REFERENCES Devices(address)
     );"

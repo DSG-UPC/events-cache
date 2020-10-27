@@ -4,7 +4,7 @@ require('dotenv').config();
 const pool = new Pool();
 
 module.exports = {
-    query: (text: any, params: any, callback: any) => {
+    query: (text, params, callback) => {
         return pool.query(text, params, callback);
     }
 };
