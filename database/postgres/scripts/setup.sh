@@ -22,25 +22,66 @@ psql -d $DB -c "CREATE TABLE Stamps (
         timestamp   integer
     );"
 
-psql -d $DB -c "CREATE TABLE Users (
-        address         varchar(42) PRIMARY KEY
-    );"
+# psql -d $DB -c "CREATE TABLE Users (
+#         address         varchar(42) PRIMARY KEY
+#     );"
 
-psql -d $DB -c "CREATE TABLE UserRecycledDevice (
-        id              SERIAL PRIMARY KEY,
+# psql -d $DB -c "CREATE TABLE Devices (
+#         address         varchar(42) PRIMARY KEY
+#     );"
+
+psql -d $DB -c "CREATE TABLE RecycleProofs (
+        id              integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+        recyclerAddress     char(42),
+        deviceAddress   char(42),
+        proofHash       char(32),
+        date            TEXT,
+        gpsLocation     TEXT
+    );"
+        # FOREIGN KEY (userAddress) REFERENCES Users(address),
+        # FOREIGN KEY (deviceAddress) REFERENCES Devices(address)
+
+psql -d $DB -c "CREATE TABLE FunctionProofs (
+        id              integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
         userAddress     varchar(42),
         deviceAddress   varchar(42),
-        FOREIGN KEY (userAddress) REFERENCES Users(address),
-        FOREIGN KEY (deviceAddress) REFERENCES Devices(address)
+        proofHash       varchar(32),
+        score           integer,
+        diskUsage       integer,
+        algorithmVersion TEXT
+    );"
+        # FOREIGN KEY (userAddress) REFERENCES Users(address),
+        # FOREIGN KEY (deviceAddress) REFERENCES Devices(address)
+
+psql -d $DB -c "CREATE TABLE TransferProofs (
+        id              integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+        supplierAddress char(42),
+        receiverAddress char(42),
+        deviceAddress   char(42),
+        proofHash       char(32)
+    );"
+        # FOREIGN KEY (supplierAddress) REFERENCES Users(address),
+        # FOREIGN KEY (receiverAddress) REFERENCES Users(address),
+        # FOREIGN KEY (deviceAddress) REFERENCES Devices(address)
+
+psql -d $DB -c "CREATE TABLE DataWipeProofs (
+        id              integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,     
+        proofHash       char(32),
+        deviceAddress   char(42),
+        erasureType     TEXT,
+        date            TEXT,
+        erasureResult   TEXT
     );"
 
-psql -d $DB -c "CREATE TABLE Devices (
-        address         varchar(42) PRIMARY KEY,
-        firstUsageHours integer,
-        lastUsageHours  integer,
-        reuseProofs     varchar(42)[],
-        recycleProofs   varchar(42)[],
-        dataWipeProofs  varchar(42)[]
+psql -d $DB -c "CREATE TABLE ReuseProofs (
+        id              integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,     
+        proofHash       char(32),
+        deviceAddress   char(42),
+        receiverSegment TEXT,
+        idReceipt       TEXT,
+        price           integer
     );"
+
+
 
 
