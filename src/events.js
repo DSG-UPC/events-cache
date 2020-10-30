@@ -22,8 +22,6 @@ module.exports = {
       topics: [ethers.utils.id("recycleProof(bytes32,address,address,string,string)")],
     },
   },
-
-
   functionProof: {
     name: "functionProof",
     iface: new ethers.utils.Interface(depositDeviceAbi),

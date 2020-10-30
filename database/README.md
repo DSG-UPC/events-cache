@@ -8,9 +8,7 @@ Running `docker network ls` will give you the hostname of that network, in my ca
 
 Next commands should print the postgres ip.
 ```bash
-a=`sudo docker network inspect database_postgres | grep database_db_1 -A 3 | tail -1 | cut -d ":" -f 2`;
-b="${a%\/*}";
-echo "${b#*\"}"
+a=`sudo docker network inspect database_postgres | grep database_db_1 -A 3 | tail -1 | cut -d ":" -f 2` && b="${a%\/*}" && echo "${b#*\"}"
 ```
 
 ### Using psql

@@ -23,18 +23,18 @@ psql -d $DB -c "CREATE TABLE Stamps (
     );"
 
 # psql -d $DB -c "CREATE TABLE Users (
-#         address         varchar(42) PRIMARY KEY
+#         address         varchar(40) PRIMARY KEY
 #     );"
 
 # psql -d $DB -c "CREATE TABLE Devices (
-#         address         varchar(42) PRIMARY KEY
+#         address         varchar(40) PRIMARY KEY
 #     );"
 
 psql -d $DB -c "CREATE TABLE RecycleProofs (
         id              integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-        recyclerAddress     char(42),
-        deviceAddress   char(42),
-        proofHash       char(32),
+        recyclerAddress char(40),
+        deviceAddress   char(40),
+        proofHash       char(64),
         date            TEXT,
         gpsLocation     TEXT
     );"
@@ -43,9 +43,9 @@ psql -d $DB -c "CREATE TABLE RecycleProofs (
 
 psql -d $DB -c "CREATE TABLE FunctionProofs (
         id              integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-        userAddress     varchar(42),
-        deviceAddress   varchar(42),
-        proofHash       varchar(32),
+        userAddress     char(40),
+        deviceAddress   char(40),
+        proofHash       char(64),
         score           integer,
         diskUsage       integer,
         algorithmVersion TEXT
@@ -55,10 +55,10 @@ psql -d $DB -c "CREATE TABLE FunctionProofs (
 
 psql -d $DB -c "CREATE TABLE TransferProofs (
         id              integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-        supplierAddress char(42),
-        receiverAddress char(42),
-        deviceAddress   char(42),
-        proofHash       char(32)
+        supplierAddress char(40),
+        receiverAddress char(40),
+        deviceAddress   char(40),
+        proofHash       char(64)
     );"
         # FOREIGN KEY (supplierAddress) REFERENCES Users(address),
         # FOREIGN KEY (receiverAddress) REFERENCES Users(address),
@@ -66,8 +66,8 @@ psql -d $DB -c "CREATE TABLE TransferProofs (
 
 psql -d $DB -c "CREATE TABLE DataWipeProofs (
         id              integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,     
-        proofHash       char(32),
-        deviceAddress   char(42),
+        deviceAddress   char(40),
+        proofHash       char(64),
         erasureType     TEXT,
         date            TEXT,
         erasureResult   TEXT
@@ -75,8 +75,8 @@ psql -d $DB -c "CREATE TABLE DataWipeProofs (
 
 psql -d $DB -c "CREATE TABLE ReuseProofs (
         id              integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,     
-        proofHash       char(32),
-        deviceAddress   char(42),
+        deviceAddress   char(40),
+        proofHash       char(64),
         receiverSegment TEXT,
         idReceipt       TEXT,
         price           integer
