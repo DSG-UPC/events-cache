@@ -1,8 +1,8 @@
 const ethers = require("ethers");
 const express = require("express")
 const bodyParser = require("body-parser")
-// const addEventToCache = require("./event-router");
-// const { stampProof, recycleProof, functionProof, transferProof, dataWipeProof, reuseProof } = require("./events")
+const sql = require("./db");
+const { stampProof, recycleProof, functionProof, transferProof, dataWipeProof, reuseProof } = require("./events")
 
 // EXPRESS API
 const app = express()
@@ -27,8 +27,10 @@ provider.on(stampProof.filter, log => {
     hash: event.hash.substring(2),
     timestamp: event.timestamp.toNumber()
   }
-  console.log("stampProof", data)
-  addEventToCache(stampProof.name, data);
+  
+  sql.query("INSERT INTO stamps VALUES($1, $2, $3)",[data.id, data.hash, data.timestamp])
+    .then(res => {console.log(`Inserted into stamps table: ${res.rowCount} row(s)`)})
+    .catch(err => console.log("Insert failed: ", err.detail))
 });
 
 provider.on(recycleProof.filter, (log) => {
@@ -41,7 +43,11 @@ provider.on(recycleProof.filter, (log) => {
     gpsLocation: event.gpsLocation
   }
   console.log("recycleProof", data);
-  addEventToCache(recycleProof.name, data)
+
+  sql.query("INSERT INTO recycleproofs (recyclerAddress, deviceAddress, proofhash, date, gpsLocation) VALUES ($1, $2, $3, $4, $5)",
+    [data.recyclerAddress, data.deviceAddress, data.proofHash, data.date, data.gpsLocation])
+    .then(res => {console.log(`Inserted into recycleproofs table: ${res.rowCount} row(s)`)})
+    .catch(err => console.log("Insert failed: ", err.stack))
 });
 
 provider.on(functionProof.filter, (log) => {
@@ -55,7 +61,11 @@ provider.on(functionProof.filter, (log) => {
     algorithmVersion: event.algorithmVersion
   }
   console.log("functionProof", data)
-  addEventToCache(functionProof.name, data)
+  
+  sql.query("INSERT INTO functionproofs (userAddress, deviceAddress, proofHash, score, diskUsage, algorithmVersion) VALUES ($1, $2, $3, $4, $5, $6)",
+  [data.ownerAddress, data.deviceAddress, data.proofHash, data.score, data.diskUsage, data.algorithmVersion])
+  .then(res => {console.log(`Inserted into functionproofs table: ${res.rowCount} row(s)`)})
+  .catch(err => console.log("Insert failed: ", err.stack))
 });
 
 provider.on(transferProof.filter, (log) => {
@@ -67,7 +77,11 @@ provider.on(transferProof.filter, (log) => {
     receiverAddress: event.receiver.substring(2)
   }
   console.log("transferProof", data)
-  addEventToCache(transferProof.name, data)
+  
+  sql.query("INSERT INTO transferProofs (deviceAddress, supplierAddress, receiverAddress, proofHash) VALUES ($1, $2, $3, $4)",
+    [data.deviceAddress, data.supplierAddress, data.receiverAddress, data.proofHash])
+    .then(res => {console.log(`Inserted into transferproofs table: ${res.rowCount} row(s)`)})
+    .catch(err => console.log("Insert failed: ", err.stack))
 });
 
 provider.on(dataWipeProof.filter, (log) => {
@@ -80,7 +94,11 @@ provider.on(dataWipeProof.filter, (log) => {
     erasureResult: event.erasureResult
   }
   console.log("dataWipeProof", data);
-  addEventToCache(dataWipeProof.name, data)
+  
+  sql.query("INSERT INTO dataWipeProofs (deviceAddress, proofHash, erasureType, date, erasureResult) VALUES ($1, $2, $3, $4, $5)",
+    [data.deviceAddress, data.proofHash, data.erasureType, data.date, data.erasureResult])
+    .then(res => {console.log(`Inserted into datawipeproofs table: ${res.rowCount} row(s)`)})
+    .catch(err => console.log("Insert failed: ", err.stack))
 });
 
 provider.on(reuseProof.filter, (log) => {
@@ -93,5 +111,9 @@ provider.on(reuseProof.filter, (log) => {
     price: event.price.toNumber()
   };
   console.log("reuseProof", data);
-  addEventToCache(reuseProof.name, data)
+  
+  sql.query("INSERT INTO reuseproofs (deviceAddress, proofHash, receiverSegment, idReceipt, price) VALUES ($1, $2, $3, $4, $5)",
+    [data.deviceAddress, data.proofHash, data.receiverSegment, data.idReceipt, data.price])
+    .then(res => {console.log(`Inserted into reuseproofs table: ${res.rowCount} row(s)`)})
+    .catch(err => console.log("Insert failed: ", err.stack))
 });
