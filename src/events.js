@@ -1,6 +1,6 @@
 const network = require("./contracts/network.json");
 const ethers = require("ethers");
-const depositDeviceAbi = require("./contracts/DepositDevice.json").abi
+const depositDeviceAbi = require("./contracts/DepositDevice.json").abi;
 
 module.exports = {
   stampProof: {
@@ -9,26 +9,27 @@ module.exports = {
       require("./contracts/StampProofs.json").abi
     ),
     filter: {
-      // All stampProofs events from stampProof SC
       address: network.development.stampProofs,
-      topics: [ethers.utils.id("stampProof(uint256,bytes32,uint256)")],
+      topics: [ethers.utils.id("stampProof(bytes32,uint256)")],
     },
   },
   recycleProof: {
     name: "recycleProof",
     iface: new ethers.utils.Interface(depositDeviceAbi),
     filter: {
-      // All recycleProofs events from recycleProof SC
-      topics: [ethers.utils.id("recycleProof(bytes32,address,address,string,string)")],
+      topics: [
+        ethers.utils.id("recycleProof(address,address,string)"),
+      ],
     },
   },
   functionProof: {
     name: "functionProof",
     iface: new ethers.utils.Interface(depositDeviceAbi),
     filter: {
-      // All functionProofs events from functionProof SC
       topics: [
-        ethers.utils.id("functionProof(bytes32,address,address,uint256,uint256,string)"),
+        ethers.utils.id(
+          "functionProof(address,address,uint256,uint256,string)"
+        ),
       ],
     },
   },
@@ -36,9 +37,8 @@ module.exports = {
     name: "transferProof",
     iface: new ethers.utils.Interface(depositDeviceAbi),
     filter: {
-      // All transferProofs events from transferProof SC
       topics: [
-        ethers.utils.id("transferProof(bytes32,address,address,address)"),
+        ethers.utils.id("transferProof(address,address,address)"),
       ],
     },
   },
@@ -46,9 +46,8 @@ module.exports = {
     name: "dataWipeProof",
     iface: new ethers.utils.Interface(depositDeviceAbi),
     filter: {
-      // All dataWipeProofs events from dataWipeProof SC
       topics: [
-        ethers.utils.id("dataWipeProof(bytes32,address,string,string,bool)"),
+        ethers.utils.id("dataWipeProof(address,address,string,bool)"),
       ],
     },
   },
@@ -56,11 +55,9 @@ module.exports = {
     name: "reuseProof",
     iface: new ethers.utils.Interface(depositDeviceAbi),
     filter: {
-      // All dataWipeProofs events from reuseProof SC
       topics: [
-        ethers.utils.id("reuseProof(bytes32,address,string,string,uint256)"),
+        ethers.utils.id("reuseProof(address,address,string,string,uint256)"),
       ],
     },
   },
 };
-
