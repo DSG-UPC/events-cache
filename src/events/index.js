@@ -1,12 +1,12 @@
-const network = require("./contracts/network.json");
+const network = require("../contracts/network.json");
 const ethers = require("ethers");
-const depositDeviceAbi = require("./contracts/DepositDevice.json").abi;
+const depositDeviceAbi = require("../contracts/DepositDevice.json").abi;
 
 module.exports = {
   stampProof: {
     name: "stampProof",
     iface: new ethers.utils.Interface(
-      require("./contracts/StampProofs.json").abi
+      require("../contracts/StampProofs.json").abi
     ),
     filter: {
       address: network.development.stampProofs,

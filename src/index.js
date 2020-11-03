@@ -2,6 +2,7 @@ const ethers = require("ethers");
 const express = require("express");
 const bodyParser = require("body-parser");
 const sql = require("./db");
+const handleErrors = require("./middlewares/handleErrors")
 const {
   stampProof,
   recycleProof,
@@ -12,19 +13,20 @@ const {
 } = require("./events");
 
 // EXPRESS API
-// const app = express();
-// const port = 3000;
-// app.use((req, res, next) => {
-//   // alow CORS
-//   res.header("Access-Control-Allow-Origin", "*");
-//   res.header(
-//     "Access-Control-Allow-Headers",
-//     "Origin, X-Requested-With, Content-Type, Accept"
-//   );
-//   next();
-// });
-// app.use("/cache", require("./routes"));
-// app.listen(port, "127.0.0.1");
+const app = express();
+const port = 3000;
+app.use((req, res, next) => {
+  // allow CORS
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  next();
+});
+app.use("/cache", require("./routes"));
+app.use(handleErrors)
+app.listen(port, "127.0.0.1");
 
 // BLOCKCHAIN EVENT SUBSCRIPTION
 const provider = new ethers.providers.JsonRpcProvider();
