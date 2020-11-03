@@ -4,37 +4,38 @@ const ethers = require("ethers");
 const { BadRequest, NotFound } = require("../utils/errors");
 
 const app = express();
-app.get("/:deviceAddress", async (req, res, next) => {
+app.get("/:userAddress", async (req, res, next) => {
   try {
-    const deviceAddress = req.params.deviceAddress;
+    const userAddress = req.params.userAddress;
 
-    if (!ethers.utils.isAddress(deviceAddress)) {
+    if (!ethers.utils.isAddress(userAddress)) {
       throw new BadRequest("Wrong address");
     }
 
     const recycleproofs = (
-      await sql.query("select * from recycleproofs where deviceaddress = $1", [
-        deviceAddress,
+      await sql.query("select * from recycleproofs where useraddress = $1", [
+        userAddress,
       ])
     ).rows;
     const functionproofs = (
-      await sql.query("select * from functionproofs where deviceaddress = $1", [
-        deviceAddress,
+      await sql.query("select * from functionproofs where useraddress = $1", [
+        userAddress,
       ])
     ).rows;
     const transferproofs = (
-      await sql.query("select * from transferproofs where deviceaddress = $1", [
-        deviceAddress,
-      ])
+      await sql.query(
+        "select * from transferproofs where supplieraddress = $1 or receiveraddress = $1",
+        [userAddress]
+      )
     ).rows;
     const datawipeproofs = (
-      await sql.query("select * from datawipeproofs where deviceaddress = $1", [
-        deviceAddress,
+      await sql.query("select * from datawipeproofs where useraddress = $1", [
+        userAddress,
       ])
     ).rows;
     const reuseproofs = (
-      await sql.query("select * from reuseproofs where deviceaddress = $1", [
-        deviceAddress,
+      await sql.query("select * from reuseproofs where useraddress = $1", [
+        userAddress,
       ])
     ).rows;
 
@@ -50,7 +51,7 @@ app.get("/:deviceAddress", async (req, res, next) => {
     return res.json({
       status: "success",
       data: {
-        device: {
+        user: {
           proofs: {
             recycleproofs,
             functionproofs,
