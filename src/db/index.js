@@ -1,4 +1,14 @@
-const { Pool } = require("pg");
+const { Client } = require("pg");
 require('dotenv').config();
 
-module.exports = new Pool();
+const client = new Client()
+
+const connect = async () => {
+    try {
+        await client.connect()
+    } catch (e) {
+        console.log(e)
+    }
+}
+connect()
+module.exports = client

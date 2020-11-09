@@ -1,9 +1,11 @@
 const express = require("express");
-const sql = require("../db");
 const ethers = require("ethers");
+const sql = require("../../db");
+
 const { BadRequest, NotFound } = require("../utils/errors");
 
 const app = express();
+
 app.get("/:deviceAddress", async (req, res, next) => {
   try {
     const deviceAddress = req.params.deviceAddress;

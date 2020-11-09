@@ -1,6 +1,0 @@
-{
-    "development": {
-        "url": "http://localhost:8545",
-        "stampProofs": "0xAE135bE1A8ab17aF2F92EdFb7Bf67d4e29623865"
-    }
-}
