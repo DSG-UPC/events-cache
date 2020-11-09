@@ -10,7 +10,7 @@ Refer to [database README](database/README.md) for instructions on how to set up
 Run `npm run events` to execute events logging service, which subscribes to certain events and stores them in the postgres database.
 Run `npm run api` to run the api.
 
-## What it does?
+## What does it do?
 ### Event subscription
 This service subscribes to certain events from the eReuse blockchain. Their data is extracted and immediately inserted into the postgres database.
 
