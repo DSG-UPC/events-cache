@@ -15,12 +15,14 @@ const bcport = process.env.BCPORT;
 const provider = new ethers.providers.JsonRpcProvider(
   `http://${bcurl}:${bcport}`
 );
-const iface = new ethers.utils.Interface(require("./abi/DepositDevice.json").abi)
+const iface = new ethers.utils.Interface(
+  require("./abi/DepositDevice.json").abi
+);
 
 provider
   .getNetwork()
   .then((network) => {
-    console.log("> Network: ", network)
+    console.log("> Network: ", network);
     console.log(`> Listening to events from blockchain at ${bcurl}:${bcport}`);
 
     if (process.env.BCRESET === "true") {
@@ -41,17 +43,21 @@ provider.on(recycleProof.filter, (log) => {
     date: event.date,
     block: log.blockNumber,
   };
-  console.log("recycleProof", data);
 
   sql
-    .query(
-      "INSERT INTO recycleproofs (userAddress, deviceAddress, block) VALUES ($1, $2, $3)",
-      [data.userAddress, data.deviceAddress, data.block]
-    )
+    .query("INSERT INTO recycleproofs VALUES ($1, $2, $3)", [
+      data.userAddress,
+      data.deviceAddress,
+      data.block,
+    ])
     .then((res) => {
       console.log(`Inserted into recycleproofs table: ${res.rowCount} row(s)`);
+      console.log("recycleProof", data, "\n");
     })
-    .catch((err) => console.log("Insert failed: ", err.stack));
+    .catch((err) => {
+      console.log("Insert failed: ", err.detail)
+      console.log("recycleProof", data, "\n");
+    });
 });
 
 provider.on(functionProof.filter, (log) => {
@@ -64,24 +70,24 @@ provider.on(functionProof.filter, (log) => {
     algorithmVersion: event.algorithmVersion,
     block: log.blockNumber,
   };
-  console.log("functionProof", data);
 
   sql
-    .query(
-      "INSERT INTO functionproofs (userAddress, deviceAddress, score, diskUsage, algorithmVersion, block) VALUES ($1, $2, $3, $4, $5, $6)",
-      [
-        data.userAddress,
-        data.deviceAddress,
-        data.score,
-        data.diskUsage,
-        data.algorithmVersion,
-        data.block,
-      ]
-    )
+    .query("INSERT INTO functionproofs VALUES ($1, $2, $3, $4, $5, $6)", [
+      data.userAddress,
+      data.deviceAddress,
+      data.block,
+      data.score,
+      data.diskUsage,
+      data.algorithmVersion,
+    ])
     .then((res) => {
       console.log(`Inserted into functionproofs table: ${res.rowCount} row(s)`);
+      console.log("functionProof", data, "\n");
     })
-    .catch((err) => console.log("Insert failed: ", err.stack));
+    .catch((err) => {
+      console.log("Insert failed: ", err.detail)
+      console.log("functionProof", data, "\n");
+    });
 });
 
 provider.on(transferProof.filter, (log) => {
@@ -92,22 +98,22 @@ provider.on(transferProof.filter, (log) => {
     receiverAddress: event.receiverAddress.substring(2),
     block: log.blockNumber,
   };
-  console.log("transferProof", data);
 
   sql
-    .query(
-      "INSERT INTO transferProofs (supplierAddress, receiverAddress, deviceAddress, block) VALUES ($1, $2, $3, $4)",
-      [
-        data.supplierAddress,
-        data.receiverAddress,
-        data.deviceAddress,
-        data.block,
-      ]
-    )
+    .query("INSERT INTO transferProofs VALUES ($1, $2, $3, $4)", [
+      data.supplierAddress,
+      data.receiverAddress,
+      data.deviceAddress,
+      data.block,
+    ])
     .then((res) => {
       console.log(`Inserted into transferproofs table: ${res.rowCount} row(s)`);
+      console.log("transferProof", data, "\n");
     })
-    .catch((err) => console.log("Insert failed: ", err.stack));
+    .catch((err) => {
+      console.log("Insert failed: ", err.detail)
+      console.log("transferProof", data, "\n");
+    });
 });
 
 provider.on(dataWipeProof.filter, (log) => {
@@ -119,23 +125,23 @@ provider.on(dataWipeProof.filter, (log) => {
     erasureResult: event.erasureResult,
     block: log.blockNumber,
   };
-  console.log("dataWipeProof", data);
 
   sql
-    .query(
-      "INSERT INTO dataWipeProofs (userAddress, deviceAddress, erasureType, erasureResult, block) VALUES ($1, $2, $3, $4, $5)",
-      [
-        data.userAddress,
-        data.deviceAddress,
-        data.erasureType,
-        data.erasureResult,
-        data.block,
-      ]
-    )
+    .query("INSERT INTO dataWipeProofs VALUES ($1, $2, $3, $4, $5)", [
+      data.userAddress,
+      data.deviceAddress,
+      data.block,
+      data.erasureType,
+      data.erasureResult,
+    ])
     .then((res) => {
       console.log(`Inserted into datawipeproofs table: ${res.rowCount} row(s)`);
+      console.log("dataWipeProof", data, "\n");
     })
-    .catch((err) => console.log("Insert failed: ", err.stack));
+    .catch((err) => {
+      console.log("Insert failed: ", err.detail)
+      console.log("dataWipeProof", data, "\n");
+    });
 });
 
 provider.on(reuseProof.filter, (log) => {
@@ -148,22 +154,22 @@ provider.on(reuseProof.filter, (log) => {
     price: event.price.toNumber(),
     block: log.blockNumber,
   };
-  console.log("reuseProof", data);
 
   sql
-    .query(
-      "INSERT INTO reuseproofs (userAddress, deviceAddress, receiverSegment, idReceipt, price, block) VALUES ($1, $2, $3, $4, $5, $6)",
-      [
-        data.userAddress,
-        data.deviceAddress,
-        data.receiverSegment,
-        data.idReceipt,
-        data.price,
-        data.block,
-      ]
-    )
+    .query("INSERT INTO reuseproofs VALUES ($1, $2, $3, $4, $5, $6)", [
+      data.userAddress,
+      data.deviceAddress,
+      data.block,
+      data.receiverSegment,
+      data.idReceipt,
+      data.price,
+    ])
     .then((res) => {
       console.log(`Inserted into reuseproofs table: ${res.rowCount} row(s)`);
+      console.log("reuseProof", data, "\n");
     })
-    .catch((err) => console.log("Insert failed: ", err.stack));
+    .catch((err) => {
+      console.log("Insert failed: ", err.detail)
+      console.log("reuseProof", data, "\n");
+    });
 });
