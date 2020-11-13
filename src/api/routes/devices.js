@@ -23,6 +23,7 @@ app.get("/:deviceAddress", async (req, res, next) => {
       status: "success",
       data: {
         device: {
+          address: deviceAddress,
           proofs
         },
       },

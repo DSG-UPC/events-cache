@@ -16,19 +16,19 @@ app.get("/:userAddress", async (req, res, next) => {
 
 
     const recycleDevices = (
-      await sql.query("select distinct deviceAddress from datawipeproofs where useraddress = $1", [
+      await sql.query("select distinct deviceAddress from recycleproofs where useraddress = $1", [
         userAddress,
       ])
     ).rows.map(device => device.deviceaddress);
     const functionDevices = (
       await sql.query(
-        "select distinct deviceAddress from datawipeproofs where useraddress = $1",
+        "select distinct deviceAddress from functionproofs where useraddress = $1",
         [userAddress]
       )
     ).rows.map((device) => device.deviceaddress);
     const transferDevices = (
       await sql.query(
-        "select distinct deviceAddress from datawipeproofs where useraddress = $1",
+        "select distinct deviceAddress from transferproofs where receiveraddress = $1 or supplieraddress = $1",
         [userAddress]
       )
     ).rows.map((device) => device.deviceaddress);
@@ -40,7 +40,7 @@ app.get("/:userAddress", async (req, res, next) => {
     ).rows.map(device => device.deviceaddress);
     const reuseDevices = (
       await sql.query(
-        "select distinct deviceAddress from datawipeproofs where useraddress = $1",
+        "select distinct deviceAddress from reuseproofs where useraddress = $1",
         [userAddress]
       )
     ).rows.map(device => device.deviceaddress);
