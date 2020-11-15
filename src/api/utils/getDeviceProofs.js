@@ -1,38 +1,38 @@
-const sql = require("../../db");
+const sql = require("../../db")
 
-async function getDeviceProofs(deviceAddress){
+async function getDeviceProofs(deviceAddress) {
   const recycleproofs = (
     await sql.query("select * from recycleproofs where deviceaddress = $1", [
       deviceAddress,
     ])
-  ).rows;
+  ).rows
   const functionproofs = (
     await sql.query("select * from functionproofs where deviceaddress = $1", [
       deviceAddress,
     ])
-  ).rows;
+  ).rows
   const transferproofs = (
     await sql.query("select * from transferproofs where deviceaddress = $1", [
       deviceAddress,
     ])
-  ).rows;
+  ).rows
   const datawipeproofs = (
     await sql.query("select * from datawipeproofs where deviceaddress = $1", [
       deviceAddress,
     ])
-  ).rows;
+  ).rows
   const reuseproofs = (
     await sql.query("select * from reuseproofs where deviceaddress = $1", [
       deviceAddress,
     ])
-  ).rows;
+  ).rows
 
   const noData =
     recycleproofs.length === 0 &&
     functionproofs.length === 0 &&
     transferproofs.length === 0 &&
     datawipeproofs.length === 0 &&
-    reuseproofs.length === 0;
+    reuseproofs.length === 0
 
   return {
     noData,
@@ -43,7 +43,7 @@ async function getDeviceProofs(deviceAddress){
       datawipeproofs,
       reuseproofs,
     },
-  };
-};
+  }
+}
 
-module.exports = {getDeviceProofs}
+module.exports = { getDeviceProofs }

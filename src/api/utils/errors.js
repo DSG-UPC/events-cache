@@ -1,17 +1,17 @@
 class GeneralError extends Error {
   constructor(message) {
-    super();
-    this.message = message;
+    super()
+    this.message = message
   }
 
   getCode() {
     if (this instanceof BadRequest) {
-      return 400;
+      return 400
     }
     if (this instanceof NotFound) {
-      return 404;
+      return 404
     }
-    return 500;
+    return 500
   }
 }
 
@@ -22,4 +22,4 @@ module.exports = {
   GeneralError,
   BadRequest,
   NotFound,
-};
+}

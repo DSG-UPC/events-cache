@@ -1,12 +1,10 @@
-const ethers = require("ethers");
+const ethers = require("ethers")
 
 module.exports = {
   recycleProof: {
     name: "recycleProof",
     filter: {
-      topics: [
-        ethers.utils.id("recycleProof(address,address,string)"),
-      ],
+      topics: [ethers.utils.id("recycleProof(address,address,string)")],
     },
   },
   functionProof: {
@@ -22,17 +20,13 @@ module.exports = {
   transferProof: {
     name: "transferProof",
     filter: {
-      topics: [
-        ethers.utils.id("transferProof(address,address,address)"),
-      ],
+      topics: [ethers.utils.id("transferProof(address,address,address)")],
     },
   },
   dataWipeProof: {
     name: "dataWipeProof",
     filter: {
-      topics: [
-        ethers.utils.id("dataWipeProof(address,address,string,bool)"),
-      ],
+      topics: [ethers.utils.id("dataWipeProof(address,address,string,bool)")],
     },
   },
   reuseProof: {
@@ -43,4 +37,4 @@ module.exports = {
       ],
     },
   },
-};
+}

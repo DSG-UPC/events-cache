@@ -22,16 +22,16 @@ psql -d $DB -c "GRANT ALL PRIVILEGES ON DATABASE $DB TO $USER;"
 #     );"
 
 psql -d $DB -c "CREATE TABLE RecycleProofs (
+        block           integer not null,
         userAddress     char(40) not null,
         deviceAddress   char(40) not null,
-        block           integer not null,
         primary key(userAddress, deviceAddress, block)
     );"
 
 psql -d $DB -c "CREATE TABLE FunctionProofs (
+        block           integer not null,
         userAddress     char(40) not null,
         deviceAddress   char(40) not null,
-        block           integer not null,
         score           integer,
         diskUsage       integer,
         algorithmVersion TEXT,
@@ -41,26 +41,26 @@ psql -d $DB -c "CREATE TABLE FunctionProofs (
         # FOREIGN KEY (deviceAddress) REFERENCES Devices(address)
 
 psql -d $DB -c "CREATE TABLE TransferProofs (
+        block           integer not null,
         supplierAddress char(40) not null,
         receiverAddress char(40) not null,
         deviceAddress   char(40) not null,
-        block           integer not null,
         primary key(supplierAddress, receiverAddress, deviceAddress, block)
     );"
 
 psql -d $DB -c "CREATE TABLE DataWipeProofs (
+        block           integer not null,
         userAddress     char(40) not null,
         deviceAddress   char(40) not null,
-        block           integer not null,
         erasureType     TEXT,
         erasureResult   TEXT,
         primary key(userAddress, deviceAddress, block)
     );"
 
 psql -d $DB -c "CREATE TABLE ReuseProofs (
+        block           integer not null,
         userAddress     char(40) not null,     
         deviceAddress   char(40) not null,
-        block           integer not null,
         receiverSegment TEXT,
         idReceipt       TEXT,
         price           integer,
