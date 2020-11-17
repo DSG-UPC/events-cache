@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+  <% const getShortAddress = (address) => { %> <%const beginning =
+  address.substring(0, 4) %> <%const end = address.substring(address.length -
+  5,address.length - 1) %> <%return "0x" + beginning + "..." + end } %>
+  <head>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap");
+
+      #pageHeader {
+        padding: 15px;
+        border-bottom-width: 1px;
+        border-bottom-color: #112131;
+        border-bottom-style: solid;
+      }
+      .detail-column {
+        display: inline-block;
+        /* display: flex;
+            flex-direction: column; */
+      }
+      .detail-column > .title {
+        font-family: Roboto;
+        font-weight: 400;
+        font-size: x-large;
+      }
+      .detail-column > .address {
+        font-family: Roboto;
+        font-weight: 300;
+        font-size: small;
+      }
+      .logo {
+        display: inline-block;
+        margin-right: 10px;
+      }
+      main {
+        margin: 0px 50px;
+      }
+      .section-title {
+        color: #3f50b5;
+        font-family: Roboto;
+        font-weight: 500;
+        font-size: 20px;
+        letter-spacing: 0.15px;
+        margin-bottom: 10px;
+        margin-top: 15px;
+      }
+      .metrics-row {
+        text-align: justify;
+        display: -webkit-flex;
+        -webkit-justify-content: space-between;
+      }
+      .paper-box {
+        display: inline-block;
+        width: 200px;
+        margin: 10px;
+        padding: 10px 15px;
+        border: 1px solid #eee;
+        border-radius: 8px;
+        color: #000;
+        background-color: #f8f8f8;
+      }
+      .paper-box.right {
+        position: relative;
+        right: 0;
+      }
+      .paper-box-title {
+        font-family: Roboto;
+        font-weight: 400;
+        font-size: 12px;
+        letter-spacing: 0.4px;
+        margin-bottom: 4px;
+      }
+      .paper-box-content {
+        font-family: Roboto;
+        font-weight: 500;
+        font-size: 12px;
+        letter-spacing: 0.25px;
+      }
+      .proofs-table-title {
+        font-family: Roboto;
+        font-weight: 400;
+        font-size: 15px;
+        letter-spacing: 0.15px;
+        margin-top: 15px;
+      }
+      .proofs-table-wrapper {
+        margin-bottom: 20px;
+        width: 100%;
+        box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2),
+          0px 1px 1px 0px rgba(0, 0, 0, 0.14),
+          0px 1px 3px 0px rgba(0, 0, 0, 0.12);
+        border-radius: 4px;
+      }
+      .proofs-table {
+        border-collapse: collapse;
+        width: 100%;
+        border: 0;
+      }
+      .proofs-table th,
+      td {
+        border: none;
+        border-bottom: 0.3mm solid rgba(224, 224, 224, 1);
+        padding: 6px 2px 6px 16px;
+        font-size: 12px;
+        font-family: Roboto;
+      }
+
+      .proofs-table th:nth-child(1) {
+        text-align: left;
+      }
+
+      .proofs-table td:nth-child(n + 2) {
+        text-align: center;
+      }
+
+      .proofs-table th {
+        font-weight: 500;
+      }
+    </style>
+  </head>
+
+  <body>
+    <header id="pageHeader">
+      <div class="logo">
+        <img
+          src="https://pbs.twimg.com/profile_images/741659820298805248/6J3xG0Mc_400x400.png"
+          alt="eReuse logo"
+          width="50"
+          height="50"
+        />
+      </div>
+      <div class="detail-column">
+        <div class="title">Device Report</div>
+        <div class="address">0x<%= deviceAddress %></div>
+      </div>
+      <!-- <div class="link-column">
+            nilquerag@gmail.com
+        </div> -->
+    </header>
+    <main>
+      <section>
+        <div class="section-title">Device Metrics</div>
+        <div class="metrics-row">
+          <div class="paper-box">
+            <div class="paper-box-title">Base Usage</div>
+            <div class="paper-box-content">
+              <%= proofs.functionproofs[0].diskusage %> hours
+            </div>
+          </div>
+          <div class="paper-box right">
+            <div class="paper-box-title">Extended Life-Time</div>
+            <div class="paper-box-content">
+              <%= proofs.functionproofs[proofs.functionproofs.length -
+              1].diskusage - proofs.functionproofs[0].diskusage %> hours
+            </div>
+          </div>
+        </div>
+        <div class="metrics-row">
+          <div class="paper-box right">
+            <div class="paper-box-title">Last Score</div>
+            <div class="paper-box-content">
+              <%= proofs.functionproofs[proofs.functionproofs.length - 1].score
+              %>/10
+            </div>
+          </div>
+        </div>
+      </section>
+      <section>
+        <div class="section-title">Proofs</div>
+        <% if (proofs.functionproofs.length > 0) {%>
+        <div class="proofs-table-title">Function Proofs</div>
+        <div class="proofs-table-wrapper">
+          <table class="proofs-table">
+            <tr>
+              <th>block</th>
+              <th>user address</th>
+              <th>device address</th>
+              <th>score</th>
+              <th>disk usage</th>
+              <th>algorithm version</th>
+            </tr>
+            <% proofs.functionproofs.forEach(proof => { %>
+            <tr>
+              <td><%= proof.block %></td>
+              <td><%= getShortAddress(proof.useraddress) %></td>
+              <td><%= getShortAddress(proof.deviceaddress) %></td>
+              <td><%= proof.score %></td>
+              <td><%= proof.diskusage %></td>
+              <td><%= proof.algorithmversion %></td>
+            </tr>
+            <% }) %>
+          </table>
+        </div>
+        <%}%> <% if (proofs.recycleproofs.length > 0) {%>
+        <div class="proofs-table-title">Recycle Proofs</div>
+        <div class="proofs-table-wrapper">
+          <table class="proofs-table">
+            <tr>
+              <th>block</th>
+              <th>user address</th>
+              <th>device address</th>
+            </tr>
+            <% proofs.recycleproofs.forEach(proof => { %>
+            <tr>
+              <td><%= proof.block %></td>
+              <td><%= getShortAddress(proof.useraddress) %></td>
+              <td><%= getShortAddress(proof.deviceaddress) %></td>
+            </tr>
+            <% }) %>
+          </table>
+        </div>
+        <%}%> <% if (proofs.recycleproofs.length > 0) {%>
+        <div class="proofs-table-title">Recycle Proofs</div>
+        <div class="proofs-table-wrapper">
+          <table class="proofs-table">
+            <tr>
+              <th>block</th>
+              <th>user address</th>
+              <th>device address</th>
+              <th>receiver segment</th>
+              <th>id receipt</th>
+              <th>price</th>
+            </tr>
+            <% proofs.reuseproofs.forEach(proof => { %>
+            <tr>
+              <td><%= proof.block %></td>
+              <td><%= getShortAddress(proof.useraddress) %></td>
+              <td><%= getShortAddress(proof.deviceaddress) %></td>
+              <td><%= proof.receiversegment %></td>
+              <td><%= proof.idreceipt %></td>
+              <td><%= proof.price %></td>
+            </tr>
+            <% }) %>
+          </table>
+        </div>
+        <%}%>
+      </section>
+    </main>
+  </body>
+</html>

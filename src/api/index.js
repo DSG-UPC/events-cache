@@ -1,7 +1,6 @@
 const express = require("express")
 const handleErrors = require("./middlewares/handleErrors")
 const bodyParser = require("body-parser")
-const cors = require("cors")
 require("dotenv").config()
 
 const port = process.env.APIPORT
@@ -23,7 +22,7 @@ app.use((req, res, next) => {
   next()
 })
 // app.use(cors())
-app.use("/cache", require("./routes"))
+app.use("/api", require("./routes"))
 app.use(handleErrors)
 
 const server = app.listen(port, url, () => {
