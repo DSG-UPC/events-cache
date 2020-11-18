@@ -5,32 +5,27 @@
   5,address.length - 1) %> <%return "0x" + beginning + "..." + end } %>
   <head>
     <style>
-      @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap");
-
-      #pageHeader {
-        padding: 15px;
-        border-bottom-width: 1px;
-        border-bottom-color: #112131;
-        border-bottom-style: solid;
-      }
-      .detail-column {
-        display: inline-block;
-        /* display: flex;
-            flex-direction: column; */
-      }
-      .detail-column > .title {
+      body {
         font-family: Roboto;
-        font-weight: 400;
-        font-size: x-large;
-      }
-      .detail-column > .address {
-        font-family: Roboto;
-        font-weight: 300;
         font-size: small;
+        color: #33333344;
       }
-      .logo {
+      #pageHeader {
+        display: -webkit-flex;
+        margin: 10px 50px;
+      }
+      #pageHeader > .logo {
         display: inline-block;
-        margin-right: 10px;
+        height: 50px;
+        margin-right: 20px;
+      }
+      #pageHeader > .title {
+        line-height: 50px;
+        font-family: Roboto;
+        font-size: 20px;
+      }
+      .logo > img {
+        height: 100%;
       }
       main {
         margin: 0px 50px;
@@ -38,11 +33,13 @@
       .section-title {
         color: #3f50b5;
         font-family: Roboto;
-        font-weight: 500;
-        font-size: 20px;
+        font-weight: 600;
+        font-size: 14px;
+        text-transform: uppercase;
         letter-spacing: 0.15px;
         margin-bottom: 10px;
         margin-top: 15px;
+        border-bottom: 1px solid #474747;
       }
       .metrics-row {
         text-align: justify;
@@ -51,7 +48,7 @@
       }
       .paper-box {
         display: inline-block;
-        width: 200px;
+        width: 160px;
         margin: 10px;
         padding: 10px 15px;
         border: 1px solid #eee;
@@ -79,14 +76,15 @@
       .proofs-table-title {
         font-family: Roboto;
         font-weight: 400;
-        font-size: 15px;
+        font-size: 14px;
         letter-spacing: 0.15px;
-        margin-top: 15px;
+        margin-top: 20px;
       }
       .proofs-table-wrapper {
-        margin-bottom: 20px;
+        margin-bottom: 30px;
+        margin-top: 10px;
         width: 100%;
-        box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2),
+        box-shadow: 0px 1px 1px 1px rgba(0, 0, 0, 0.24),
           0px 1px 1px 0px rgba(0, 0, 0, 0.14),
           0px 1px 3px 0px rgba(0, 0, 0, 0.12);
         border-radius: 4px;
@@ -99,22 +97,26 @@
       .proofs-table th,
       td {
         border: none;
-        border-bottom: 0.3mm solid rgba(224, 224, 224, 1);
-        padding: 6px 2px 6px 16px;
-        font-size: 12px;
+        border-bottom: 1px solid rgba(224, 224, 224, 1);
+        padding: 6px;
+        font-size: 10px;
         font-family: Roboto;
       }
-
+      .proofs-table tr:last-child > td {
+        border-bottom: none;
+      }
       .proofs-table th:nth-child(1) {
         text-align: left;
       }
-
       .proofs-table td:nth-child(n + 2) {
         text-align: center;
       }
-
       .proofs-table th {
         font-weight: 500;
+      }
+      #pageFooter {
+        margin: 0px 50px;
+        font-size: 10px;
       }
     </style>
   </head>
@@ -125,45 +127,72 @@
         <img
           src="https://pbs.twimg.com/profile_images/741659820298805248/6J3xG0Mc_400x400.png"
           alt="eReuse logo"
-          width="50"
-          height="50"
         />
       </div>
-      <div class="detail-column">
-        <div class="title">Device Report</div>
-        <div class="address">0x<%= deviceAddress %></div>
-      </div>
-      <!-- <div class="link-column">
-            nilquerag@gmail.com
-        </div> -->
+      <div class="title">Device Report</div>
     </header>
     <main>
       <section>
+        <div>
+          <span><b>Device Address: </b></span>
+          <span>0x<%= deviceAddress%></span>
+        </div>
+      </section>
+      <section>
         <div class="section-title">Device Metrics</div>
-        <div class="metrics-row">
-          <div class="paper-box">
-            <div class="paper-box-title">Base Usage</div>
-            <div class="paper-box-content">
-              <%= proofs.functionproofs[0].diskusage %> hours
-            </div>
-          </div>
-          <div class="paper-box right">
-            <div class="paper-box-title">Extended Life-Time</div>
-            <div class="paper-box-content">
-              <%= proofs.functionproofs[proofs.functionproofs.length -
-              1].diskusage - proofs.functionproofs[0].diskusage %> hours
-            </div>
-          </div>
+        <div>
+          <span><b>Base Usage: </b></span>
+          <span><%= proofs.functionproofs[0].diskusage%> hours</span>
         </div>
-        <div class="metrics-row">
-          <div class="paper-box right">
-            <div class="paper-box-title">Last Score</div>
-            <div class="paper-box-content">
-              <%= proofs.functionproofs[proofs.functionproofs.length - 1].score
-              %>/10
-            </div>
-          </div>
+        <div>
+          <span><b>Extended Life-Time: </b></span>
+          <span
+            ><%= proofs.functionproofs[proofs.functionproofs.length -
+            1].diskusage - proofs.functionproofs[0].diskusage%> hours</span
+          >
         </div>
+        <div>
+          <span><b>Last Score: </b></span>
+          <span
+            ><%= proofs.functionproofs[proofs.functionproofs.length - 1].score
+            %>/10</span
+          >
+        </div>
+        <br />
+        <div>
+          <span><b>#Proofs: </b></span>
+          <span
+            ><%= proofs.functionproofs.length + proofs.recycleproofs.length +
+            proofs.reuseproofs.length + proofs.datawipeproofs.length +
+            proofs.transferproofs.length %></span
+          >
+        </div>
+        <!--
+          <div class="metrics-row">
+            <div class="paper-box">
+              <div class="paper-box-title">Base Usage</div>
+              <div class="paper-box-content">
+                <%= proofs.functionproofs[0].diskusage %> hours
+                </div>
+                </div>
+                <div class="paper-box right">
+                  <div class="paper-box-title">Extended Life-Time</div>
+                  <div class="paper-box-content">
+                    <%= proofs.functionproofs[proofs.functionproofs.length -
+                    1].diskusage - proofs.functionproofs[0].diskusage %> hours
+                    </div>
+                    </div>
+                    </div>
+                    <div class="metrics-row">
+                      <div class="paper-box right">
+                        <div class="paper-box-title">Last Score</div>
+                        <div class="paper-box-content">
+                          <%= proofs.functionproofs[proofs.functionproofs.length - 1].score
+                          %>/10
+                          </div>
+                          </div>
+                          </div>
+                          -->
       </section>
       <section>
         <div class="section-title">Proofs</div>
@@ -236,5 +265,11 @@
         <%}%>
       </section>
     </main>
+    <footer id="pageFooter">
+      Created by eReuse on <%=date%>
+      <br />
+      Validate this report at:
+      <a href="<%=validateUrl%>"><%= validateUrl%></a>
+    </footer>
   </body>
 </html>
