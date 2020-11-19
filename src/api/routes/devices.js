@@ -1,8 +1,7 @@
 const express = require("express")
 const ethers = require("ethers")
-const getDeviceProofs = require("../utils/getDeviceProofs")
-
 const { BadRequest, NotFound } = require("../utils/errors")
+const { queryDevice } = require("../utils/dbqueries")
 
 const app = express()
 
@@ -14,17 +13,14 @@ app.get("/:deviceAddress", async (req, res, next) => {
       throw new BadRequest("Wrong address")
     }
 
-    const { noData, proofs } = await getDeviceProofs(deviceAddress)
+    const { noData, device } = await queryDevice(deviceAddress)
 
-    if (noData) throw new NotFound("Data not found for this device address")
+    if (noData) throw new NotFound("Device not found")
 
     return res.json({
       status: "success",
       data: {
-        device: {
-          address: deviceAddress,
-          proofs,
-        },
+        device,
       },
     })
   } catch (e) {

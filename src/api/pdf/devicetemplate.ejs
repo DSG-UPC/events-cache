@@ -132,62 +132,38 @@
       <section>
         <div>
           <span><b>Device Address: </b></span>
-          <span>0x<%= deviceAddress%></span>
+          <span>0x<%= device.address%></span>
         </div>
       </section>
       <section>
         <div class="section-title">Device Metrics</div>
         <div>
           <span><b>Base Usage: </b></span>
-          <span><%= firstUsage %> hours</span>
+          <span><%= device.impact.firstUsage %> hours</span>
         </div>
         <div>
           <span><b>Extended Life-Time: </b></span>
-          <span><%= extendedUsage %> hours</span>
+          <span><%= device.impact.extendedUsage %> hours</span>
         </div>
         <div>
           <span><b>Last Score: </b></span>
-          <span><%= lastScore %>/10</span>
+          <span><%= device.impact.lastScore %>/10</span>
         </div>
         <br />
         <div>
           <span><b>#Proofs: </b></span>
           <span
-            ><%= proofs.functionproofs.length + proofs.recycleproofs.length +
-            proofs.reuseproofs.length + proofs.datawipeproofs.length +
-            proofs.transferproofs.length %></span
+            ><%= device.proofs.functionproofs.length +
+            device.proofs.recycleproofs.length +
+            device.proofs.reuseproofs.length +
+            device.proofs.datawipeproofs.length +
+            device.proofs.transferproofs.length %></span
           >
         </div>
-        <!--
-          <div class="metrics-row">
-            <div class="paper-box">
-              <div class="paper-box-title">Base Usage</div>
-              <div class="paper-box-content">
-                <%= proofs.functionproofs[0].diskusage %> hours
-                </div>
-                </div>
-                <div class="paper-box right">
-                  <div class="paper-box-title">Extended Life-Time</div>
-                  <div class="paper-box-content">
-                    <%= proofs.functionproofs[proofs.functionproofs.length -
-                    1].diskusage - proofs.functionproofs[0].diskusage %> hours
-                    </div>
-                    </div>
-                    </div>
-                    <div class="metrics-row">
-                      <div class="paper-box right">
-                        <div class="paper-box-title">Last Score</div>
-                        <div class="paper-box-content">
-                          <%= proofs.functionproofs[proofs.functionproofs.length - 1].score
-                          %>/10
-                          </div>
-                          </div>
-                          </div>
-                          -->
       </section>
       <section>
         <div class="section-title">Proofs</div>
-        <% if (proofs.functionproofs.length > 0) {%>
+        <% if (device.proofs.functionproofs.length > 0) {%>
         <div class="proofs-table-title">Function Proofs</div>
         <div class="proofs-table-wrapper">
           <table class="proofs-table">
@@ -199,7 +175,7 @@
               <th>disk usage</th>
               <th>algorithm version</th>
             </tr>
-            <% proofs.functionproofs.forEach(proof => { %>
+            <% device.proofs.functionproofs.forEach(proof => { %>
             <tr>
               <td><%= proof.block %></td>
               <td><%= helpers.getShortAddress(proof.useraddress) %></td>
@@ -211,7 +187,7 @@
             <% }) %>
           </table>
         </div>
-        <%}%> <% if (proofs.recycleproofs.length > 0) {%>
+        <%}%> <% if (device.proofs.recycleproofs.length > 0) {%>
         <div class="proofs-table-title">Recycle Proofs</div>
         <div class="proofs-table-wrapper">
           <table class="proofs-table">
@@ -220,7 +196,7 @@
               <th>user address</th>
               <th>device address</th>
             </tr>
-            <% proofs.recycleproofs.forEach(proof => { %>
+            <% device.proofs.recycleproofs.forEach(proof => { %>
             <tr>
               <td><%= proof.block %></td>
               <td><%= helpers.getShortAddress(proof.useraddress) %></td>
@@ -229,7 +205,7 @@
             <% }) %>
           </table>
         </div>
-        <%}%> <% if (proofs.recycleproofs.length > 0) {%>
+        <%}%> <% if (device.proofs.recycleproofs.length > 0) {%>
         <div class="proofs-table-title">Recycle Proofs</div>
         <div class="proofs-table-wrapper">
           <table class="proofs-table">
@@ -241,7 +217,7 @@
               <th>id receipt</th>
               <th>price</th>
             </tr>
-            <% proofs.reuseproofs.forEach(proof => { %>
+            <% device.proofs.reuseproofs.forEach(proof => { %>
             <tr>
               <td><%= proof.block %></td>
               <td><%= helpers.getShortAddress(proof.useraddress) %></td>

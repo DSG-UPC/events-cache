@@ -1,7 +1,6 @@
 const express = require("express")
 const ethers = require("ethers")
-const sql = require("../../db")
-const getDeviceProofs = require("../utils/getDeviceProofs")
+const { queryUser } = require("../utils/dbqueries")
 const { BadRequest, NotFound } = require("../utils/errors")
 
 const app = express()
@@ -14,66 +13,14 @@ app.get("/:userAddress", async (req, res, next) => {
       throw new BadRequest("Wrong address")
     }
 
-    const recycleDevices = (
-      await sql.query(
-        "select distinct deviceAddress from recycleproofs where useraddress = $1",
-        [userAddress]
-      )
-    ).rows.map((device) => device.deviceaddress)
-    const functionDevices = (
-      await sql.query(
-        "select distinct deviceAddress from functionproofs where useraddress = $1",
-        [userAddress]
-      )
-    ).rows.map((device) => device.deviceaddress)
-    const transferDevices = (
-      await sql.query(
-        "select distinct deviceAddress from transferproofs where receiveraddress = $1 or supplieraddress = $1",
-        [userAddress]
-      )
-    ).rows.map((device) => device.deviceaddress)
-    const datawipeDevices = (
-      await sql.query(
-        "select distinct deviceAddress from datawipeproofs where useraddress = $1",
-        [userAddress]
-      )
-    ).rows.map((device) => device.deviceaddress)
-    const reuseDevices = (
-      await sql.query(
-        "select distinct deviceAddress from reuseproofs where useraddress = $1",
-        [userAddress]
-      )
-    ).rows.map((device) => device.deviceaddress)
+    const { noData, user } = await queryUser(userAddress)
 
-    // dispositius en els que ha participat (amb una o més proofs) userAddress
-    const deviceAddresses = [
-      ...new Set([
-        ...recycleDevices,
-        ...functionDevices,
-        ...transferDevices,
-        ...datawipeDevices,
-        ...reuseDevices,
-      ]),
-    ]
-    if (deviceAddresses.length === 0) {
-      throw new NotFound("Data not found for this user address")
-    }
-
-    const devices = []
-    for (const deviceAddress of deviceAddresses) {
-      const { proofs } = await getDeviceProofs(deviceAddress)
-      devices.push({
-        address: deviceAddress,
-        proofs,
-      })
-    }
+    if (noData) throw new NotFound("User not found")
 
     return res.json({
       status: "success",
       data: {
-        user: {
-          devices,
-        },
+        user,
       },
     })
   } catch (e) {

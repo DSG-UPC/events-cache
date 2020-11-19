@@ -5,10 +5,7 @@ const ejs = require("ejs")
 const path = require("path")
 const { BadRequest, NotFound } = require("../utils/errors")
 
-const getDeviceProofs = require("../utils/getDeviceProofs")
-const getUserDevices = require("../utils/getUserDevices")
-const getDeviceImpact = require("../utils/getDeviceImpact")
-const getUserImpact = require("../utils/getUserImpact")
+const { queryDevice, queryUser } = require("../utils/dbqueries")
 const ejsHelpers = {
   getShortAddress: require("../utils/getShortAddress"),
 }
@@ -25,16 +22,14 @@ app.get("/devices/:deviceAddress", async (req, res, next) => {
       throw new BadRequest("Wrong address")
     }
 
-    const { noData, proofs } = await getDeviceProofs(deviceAddress)
+    const { noData, device } = await queryDevice(deviceAddress)
 
-    if (noData) throw new NotFound("Data not found for this device address")
+    if (noData) throw new NotFound("Device not found")
 
     ejs.renderFile(
       path.join(__dirname, "../pdf/devicetemplate.ejs"),
       {
-        deviceAddress,
-        proofs,
-        ...getDeviceImpact(proofs),
+        device,
         validateUrl: `${process.env.FRONTENDURL}/?device=${deviceAddress}`,
         date: new Date().toGMTString(),
         helpers: ejsHelpers,
@@ -83,16 +78,14 @@ app.get("/users/:userAddress", async (req, res, next) => {
       throw new BadRequest("Wrong address")
     }
 
-    const { noData, devices } = await getUserDevices(userAddress)
+    const { noData, user } = await queryUser(userAddress)
 
     if (noData) throw new NotFound("Data not found for this device address")
 
     ejs.renderFile(
       path.join(__dirname, "../pdf/usertemplate.ejs"),
       {
-        userAddress,
-        devices,
-        ...getUserImpact(devices),
+        user,
         validateUrl: `${process.env.FRONTENDURL}/?device=${userAddress}`,
         date: new Date().toGMTString(),
       },

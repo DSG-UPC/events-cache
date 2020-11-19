@@ -135,14 +135,14 @@
       <section>
         <div>
           <span><b>User Address: </b></span>
-          <span>0x<%= userAddress%></span>
+          <span>0x<%= user.address%></span>
         </div>
       </section>
       <section>
         <div class="section-title">User Metrics</div>
         <div>
           <span><b>Total Extended Life-Time: </b></span>
-          <span><%= totalExtendedUsage %> hours</span>
+          <span><%= user.impact.totalExtendedUsage %> hours</span>
         </div>
       </section>
     </main>
