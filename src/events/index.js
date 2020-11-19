@@ -33,6 +33,22 @@ provider
     process.exit(1)
   })
 
+provider.on(deviceCreated.filter, (log) => {
+  const event = deviceCreated.iface.parseLog(log).args
+  const deviceAddress = event._deviceAddress.substring(2)
+
+  sql
+    .query("INSERT INTO devices VALUES($1)", [deviceAddress])
+    .then((res) => {
+      console.log("DeviceCreated: ", deviceAddress)
+      console.log(`Inserted into Devices table: ${res.rowCount} row(s)`, "\n")
+    })
+    .catch((err) => {
+      console.log("DeviceCreated: ", deviceAddress)
+      console.log("Insert failed: ", err.detail, "\n")
+    })
+})
+
 provider.on(recycleProof.filter, (log) => {
   const event = recycleProof.iface.parseLog(log).args
   const data = {
@@ -49,12 +65,15 @@ provider.on(recycleProof.filter, (log) => {
       data.deviceAddress,
     ])
     .then((res) => {
-      console.log("recycleProof", data, "\n")
-      console.log(`Inserted into recycleproofs table: ${res.rowCount} row(s)`)
+      console.log("recycleProof", data)
+      console.log(
+        `Inserted into recycleproofs table: ${res.rowCount} row(s)`,
+        "\n"
+      )
     })
     .catch((err) => {
-      console.log("recycleProof", data, "\n")
-      console.log("Insert failed: ", err.detail)
+      console.log("recycleProof", data)
+      console.log("Insert failed: ", err.detail, "\n")
     })
 })
 
@@ -79,12 +98,15 @@ provider.on(functionProof.filter, (log) => {
       data.algorithmVersion,
     ])
     .then((res) => {
-      console.log("functionProof", data, "\n")
-      console.log(`Inserted into functionproofs table: ${res.rowCount} row(s)`)
+      console.log("functionProof", data)
+      console.log(
+        `Inserted into functionproofs table: ${res.rowCount} row(s)`,
+        "\n"
+      )
     })
     .catch((err) => {
-      console.log("functionProof", data, "\n")
-      console.log("Insert failed: ", err.detail)
+      console.log("functionProof", data)
+      console.log("Insert failed: ", err.detail, "\n")
     })
 })
 
@@ -105,12 +127,15 @@ provider.on(transferProof.filter, (log) => {
       data.deviceAddress,
     ])
     .then((res) => {
-      console.log("transferProof", data, "\n")
-      console.log(`Inserted into transferproofs table: ${res.rowCount} row(s)`)
+      console.log("transferProof", data)
+      console.log(
+        `Inserted into transferproofs table: ${res.rowCount} row(s)`,
+        "\n"
+      )
     })
     .catch((err) => {
-      console.log("transferProof", data, "\n")
-      console.log("Insert failed: ", err.detail)
+      console.log("transferProof", data)
+      console.log("Insert failed: ", err.detail, "\n")
     })
 })
 
@@ -133,12 +158,15 @@ provider.on(dataWipeProof.filter, (log) => {
       data.erasureResult,
     ])
     .then((res) => {
-      console.log("dataWipeProof", data, "\n")
-      console.log(`Inserted into datawipeproofs table: ${res.rowCount} row(s)`)
+      console.log("dataWipeProof", data)
+      console.log(
+        `Inserted into datawipeproofs table: ${res.rowCount} row(s)`,
+        "\n"
+      )
     })
     .catch((err) => {
-      console.log("dataWipeProof", data, "\n")
-      console.log("Insert failed: ", err.detail)
+      console.log("dataWipeProof", data)
+      console.log("Insert failed: ", err.detail, "\n")
     })
 })
 
@@ -163,27 +191,14 @@ provider.on(reuseProof.filter, (log) => {
       data.price,
     ])
     .then((res) => {
-      console.log("reuseProof", data, "\n")
-      console.log(`Inserted into reuseproofs table: ${res.rowCount} row(s)`)
+      console.log("reuseProof", data)
+      console.log(
+        `Inserted into reuseproofs table: ${res.rowCount} row(s)`,
+        "\n"
+      )
     })
     .catch((err) => {
-      console.log("reuseProof", data, "\n")
-      console.log("Insert failed: ", err.detail)
-    })
-})
-
-provider.on(deviceCreated.filter, (log) => {
-  const event = deviceCreated.iface.parseLog(log).args
-  const deviceAddress = event._deviceAddress.substring(2)
-
-  sql
-    .query("INSERT INTO devices VALUES($1)", [deviceAddress])
-    .then((res) => {
-      console.log("DeviceCreated: ", deviceAddress, "\n")
-      console.log(`Inserted into Devices table: ${res.rowCount} row(s)`)
-    })
-    .catch((err) => {
-      console.log("DeviceCreated: ", deviceAddress, "\n")
-      console.log("Insert failed: ", err.detail)
+      console.log("reuseProof", data)
+      console.log("Insert failed: ", err.detail, "\n")
     })
 })

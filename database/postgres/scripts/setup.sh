@@ -25,7 +25,8 @@ psql -d $DB -c "CREATE TABLE RecycleProofs (
         block           integer not null,
         userAddress     char(40) not null,
         deviceAddress   char(40) not null,
-        primary key(userAddress, deviceAddress, block)
+        primary key(userAddress, deviceAddress, block),
+        foreign key(deviceAddress) references Devices(address) on delete set null
     );"
 
 psql -d $DB -c "CREATE TABLE FunctionProofs (
@@ -35,7 +36,8 @@ psql -d $DB -c "CREATE TABLE FunctionProofs (
         score           integer,
         diskUsage       integer,
         algorithmVersion TEXT,
-        primary key(userAddress, deviceAddress, block)
+        primary key(userAddress, deviceAddress, block),
+        foreign key(deviceAddress) references Devices(address) on delete set null
     );"
         # FOREIGN KEY (userAddress) REFERENCES Users(address),
         # FOREIGN KEY (deviceAddress) REFERENCES Devices(address)
@@ -45,7 +47,9 @@ psql -d $DB -c "CREATE TABLE TransferProofs (
         supplierAddress char(40) not null,
         receiverAddress char(40) not null,
         deviceAddress   char(40) not null,
-        primary key(supplierAddress, receiverAddress, deviceAddress, block)
+        primary key(supplierAddress, receiverAddress, deviceAddress, block),
+        foreign key(supplierAddress) references Devices(address) on delete set null,
+        foreign key(receiverAddress) references Devices(address) on delete set null
     );"
 
 psql -d $DB -c "CREATE TABLE DataWipeProofs (
@@ -54,7 +58,8 @@ psql -d $DB -c "CREATE TABLE DataWipeProofs (
         deviceAddress   char(40) not null,
         erasureType     TEXT,
         erasureResult   TEXT,
-        primary key(userAddress, deviceAddress, block)
+        primary key(userAddress, deviceAddress, block),
+        foreign key(deviceAddress) references Devices(address) on delete set null
     );"
 
 psql -d $DB -c "CREATE TABLE ReuseProofs (
@@ -64,7 +69,8 @@ psql -d $DB -c "CREATE TABLE ReuseProofs (
         receiverSegment TEXT,
         idReceipt       TEXT,
         price           integer,
-        primary key(userAddress, deviceAddress, block)
+        primary key(userAddress, deviceAddress, block),
+        foreign key(deviceAddress) references Devices(address) on delete set null
     );"
 
 
