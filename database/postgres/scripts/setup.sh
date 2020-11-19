@@ -17,9 +17,9 @@ psql -d $DB -c "GRANT ALL PRIVILEGES ON DATABASE $DB TO $USER;"
 #         address         varchar(40) PRIMARY KEY
 #     );"
 
-# psql -d $DB -c "CREATE TABLE Devices (
-#         address         varchar(40) PRIMARY KEY
-#     );"
+psql -d $DB -c "CREATE TABLE Devices (
+        address         char(40) PRIMARY KEY
+    );"
 
 psql -d $DB -c "CREATE TABLE RecycleProofs (
         block           integer not null,

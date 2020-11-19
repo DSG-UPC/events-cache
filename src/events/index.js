@@ -6,6 +6,7 @@ const {
   transferProof,
   dataWipeProof,
   reuseProof,
+  deviceCreated,
 } = require("./events")
 require("dotenv").config()
 
@@ -14,9 +15,6 @@ const bcport = process.env.BCPORT
 
 const provider = new ethers.providers.JsonRpcProvider(
   `http://${bcurl}:${bcport}`
-)
-const iface = new ethers.utils.Interface(
-  require("./abi/DepositDevice.json").abi
 )
 
 provider
@@ -36,7 +34,7 @@ provider
   })
 
 provider.on(recycleProof.filter, (log) => {
-  const event = iface.parseLog(log).args
+  const event = recycleProof.iface.parseLog(log).args
   const data = {
     userAddress: event.userAddress.substring(2),
     deviceAddress: event.deviceAddress.substring(2),
@@ -51,17 +49,17 @@ provider.on(recycleProof.filter, (log) => {
       data.deviceAddress,
     ])
     .then((res) => {
-      console.log(`Inserted into recycleproofs table: ${res.rowCount} row(s)`)
       console.log("recycleProof", data, "\n")
+      console.log(`Inserted into recycleproofs table: ${res.rowCount} row(s)`)
     })
     .catch((err) => {
-      console.log("Insert failed: ", err.detail)
       console.log("recycleProof", data, "\n")
+      console.log("Insert failed: ", err.detail)
     })
 })
 
 provider.on(functionProof.filter, (log) => {
-  const event = iface.parseLog(log).args
+  const event = functionProof.iface.parseLog(log).args
   const data = {
     userAddress: event.userAddress.substring(2),
     deviceAddress: event.deviceAddress.substring(2),
@@ -81,17 +79,17 @@ provider.on(functionProof.filter, (log) => {
       data.algorithmVersion,
     ])
     .then((res) => {
-      console.log(`Inserted into functionproofs table: ${res.rowCount} row(s)`)
       console.log("functionProof", data, "\n")
+      console.log(`Inserted into functionproofs table: ${res.rowCount} row(s)`)
     })
     .catch((err) => {
-      console.log("Insert failed: ", err.detail)
       console.log("functionProof", data, "\n")
+      console.log("Insert failed: ", err.detail)
     })
 })
 
 provider.on(transferProof.filter, (log) => {
-  const event = iface.parseLog(log).args
+  const event = transferProof.iface.parseLog(log).args
   const data = {
     deviceAddress: event.deviceAddress.substring(2),
     supplierAddress: event.supplierAddress.substring(2),
@@ -107,17 +105,17 @@ provider.on(transferProof.filter, (log) => {
       data.deviceAddress,
     ])
     .then((res) => {
-      console.log(`Inserted into transferproofs table: ${res.rowCount} row(s)`)
       console.log("transferProof", data, "\n")
+      console.log(`Inserted into transferproofs table: ${res.rowCount} row(s)`)
     })
     .catch((err) => {
-      console.log("Insert failed: ", err.detail)
       console.log("transferProof", data, "\n")
+      console.log("Insert failed: ", err.detail)
     })
 })
 
 provider.on(dataWipeProof.filter, (log) => {
-  const event = iface.parseLog(log).args
+  const event = dataWipeProof.iface.parseLog(log).args
   const data = {
     userAddress: event.userAddress.substring(2),
     deviceAddress: event.deviceAddress.substring(2),
@@ -135,17 +133,17 @@ provider.on(dataWipeProof.filter, (log) => {
       data.erasureResult,
     ])
     .then((res) => {
-      console.log(`Inserted into datawipeproofs table: ${res.rowCount} row(s)`)
       console.log("dataWipeProof", data, "\n")
+      console.log(`Inserted into datawipeproofs table: ${res.rowCount} row(s)`)
     })
     .catch((err) => {
-      console.log("Insert failed: ", err.detail)
       console.log("dataWipeProof", data, "\n")
+      console.log("Insert failed: ", err.detail)
     })
 })
 
 provider.on(reuseProof.filter, (log) => {
-  const event = iface.parseLog(log).args
+  const event = reuseProof.iface.parseLog(log).args
   const data = {
     userAddress: event.userAddress.substring(2),
     deviceAddress: event.deviceAddress.substring(2),
@@ -165,11 +163,27 @@ provider.on(reuseProof.filter, (log) => {
       data.price,
     ])
     .then((res) => {
-      console.log(`Inserted into reuseproofs table: ${res.rowCount} row(s)`)
       console.log("reuseProof", data, "\n")
+      console.log(`Inserted into reuseproofs table: ${res.rowCount} row(s)`)
     })
     .catch((err) => {
-      console.log("Insert failed: ", err.detail)
       console.log("reuseProof", data, "\n")
+      console.log("Insert failed: ", err.detail)
+    })
+})
+
+provider.on(deviceCreated.filter, (log) => {
+  const event = deviceCreated.iface.parseLog(log).args
+  const deviceAddress = event._deviceAddress.substring(2)
+
+  sql
+    .query("INSERT INTO devices VALUES($1)", [deviceAddress])
+    .then((res) => {
+      console.log("DeviceCreated: ", deviceAddress, "\n")
+      console.log(`Inserted into Devices table: ${res.rowCount} row(s)`)
+    })
+    .catch((err) => {
+      console.log("DeviceCreated: ", deviceAddress, "\n")
+      console.log("Insert failed: ", err.detail)
     })
 })
