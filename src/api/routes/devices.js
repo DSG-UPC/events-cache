@@ -1,6 +1,6 @@
 const express = require("express")
 const ethers = require("ethers")
-const { getDeviceProofs } = require("../utils/getDeviceProofs")
+const getDeviceProofs = require("../utils/getDeviceProofs")
 
 const { BadRequest, NotFound } = require("../utils/errors")
 

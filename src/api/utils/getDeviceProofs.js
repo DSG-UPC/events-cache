@@ -46,4 +46,4 @@ async function getDeviceProofs(deviceAddress) {
   }
 }
 
-module.exports = { getDeviceProofs }
+module.exports = getDeviceProofs

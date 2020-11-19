@@ -1,7 +1,7 @@
 const express = require("express")
 const ethers = require("ethers")
 const sql = require("../../db")
-const { getDeviceProofs } = require("../utils/getDeviceProofs")
+const getDeviceProofs = require("../utils/getDeviceProofs")
 const { BadRequest, NotFound } = require("../utils/errors")
 
 const app = express()

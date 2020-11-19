@@ -4,4 +4,4 @@ const getShortAddress = (address) => {
   return "0x" + beginning + "..." + end
 }
 
-module.exports = { getShortAddress }
+module.exports = getShortAddress

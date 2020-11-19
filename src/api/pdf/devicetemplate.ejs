@@ -1,8 +1,5 @@
 <!DOCTYPE html>
 <html>
-  <% const getShortAddress = (address) => { %> <%const beginning =
-  address.substring(0, 4) %> <%const end = address.substring(address.length -
-  5,address.length - 1) %> <%return "0x" + beginning + "..." + end } %>
   <head>
     <style>
       body {
@@ -142,21 +139,15 @@
         <div class="section-title">Device Metrics</div>
         <div>
           <span><b>Base Usage: </b></span>
-          <span><%= proofs.functionproofs[0].diskusage%> hours</span>
+          <span><%= firstUsage %> hours</span>
         </div>
         <div>
           <span><b>Extended Life-Time: </b></span>
-          <span
-            ><%= proofs.functionproofs[proofs.functionproofs.length -
-            1].diskusage - proofs.functionproofs[0].diskusage%> hours</span
-          >
+          <span><%= extendedUsage %> hours</span>
         </div>
         <div>
           <span><b>Last Score: </b></span>
-          <span
-            ><%= proofs.functionproofs[proofs.functionproofs.length - 1].score
-            %>/10</span
-          >
+          <span><%= lastScore %>/10</span>
         </div>
         <br />
         <div>
@@ -211,8 +202,8 @@
             <% proofs.functionproofs.forEach(proof => { %>
             <tr>
               <td><%= proof.block %></td>
-              <td><%= getShortAddress(proof.useraddress) %></td>
-              <td><%= getShortAddress(proof.deviceaddress) %></td>
+              <td><%= helpers.getShortAddress(proof.useraddress) %></td>
+              <td><%= helpers.getShortAddress(proof.deviceaddress) %></td>
               <td><%= proof.score %></td>
               <td><%= proof.diskusage %></td>
               <td><%= proof.algorithmversion %></td>
@@ -232,8 +223,8 @@
             <% proofs.recycleproofs.forEach(proof => { %>
             <tr>
               <td><%= proof.block %></td>
-              <td><%= getShortAddress(proof.useraddress) %></td>
-              <td><%= getShortAddress(proof.deviceaddress) %></td>
+              <td><%= helpers.getShortAddress(proof.useraddress) %></td>
+              <td><%= helpers.getShortAddress(proof.deviceaddress) %></td>
             </tr>
             <% }) %>
           </table>
@@ -253,8 +244,8 @@
             <% proofs.reuseproofs.forEach(proof => { %>
             <tr>
               <td><%= proof.block %></td>
-              <td><%= getShortAddress(proof.useraddress) %></td>
-              <td><%= getShortAddress(proof.deviceaddress) %></td>
+              <td><%= helpers.getShortAddress(proof.useraddress) %></td>
+              <td><%= helpers.getShortAddress(proof.deviceaddress) %></td>
               <td><%= proof.receiversegment %></td>
               <td><%= proof.idreceipt %></td>
               <td><%= proof.price %></td>
