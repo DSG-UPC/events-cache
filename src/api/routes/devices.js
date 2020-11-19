@@ -13,9 +13,9 @@ app.get("/:deviceAddress", async (req, res, next) => {
       throw new BadRequest("Wrong address")
     }
 
-    const { noData, device } = await queryDevice(deviceAddress)
+    const device = await queryDevice(deviceAddress)
 
-    if (noData) throw new NotFound("Device not found")
+    if (!device) throw new NotFound("Device not found")
 
     return res.json({
       status: "success",

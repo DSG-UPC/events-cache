@@ -13,9 +13,9 @@ app.get("/:userAddress", async (req, res, next) => {
       throw new BadRequest("Wrong address")
     }
 
-    const { noData, user } = await queryUser(userAddress)
+    const user = await queryUser(userAddress)
 
-    if (noData) throw new NotFound("User not found")
+    if (!user) throw new NotFound("User not found")
 
     return res.json({
       status: "success",

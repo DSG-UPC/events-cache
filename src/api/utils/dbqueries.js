@@ -3,6 +3,14 @@ const getDeviceImpact = require("./getDeviceImpact")
 const getUserImpact = require("./getUserImpact")
 
 async function queryDevice(deviceAddress) {
+  const device = (
+    await sql.query("select * from devices where address = $1", [deviceAddress])
+  ).rows
+
+  if (device.length === 0) {
+    return null
+  }
+
   const recycleproofs = (
     await sql.query("select * from recycleproofs where deviceaddress = $1", [
       deviceAddress,
@@ -29,13 +37,6 @@ async function queryDevice(deviceAddress) {
     ])
   ).rows
 
-  const noData =
-    recycleproofs.length === 0 &&
-    functionproofs.length === 0 &&
-    transferproofs.length === 0 &&
-    datawipeproofs.length === 0 &&
-    reuseproofs.length === 0
-
   const proofs = {
     recycleproofs,
     functionproofs,
@@ -44,12 +45,9 @@ async function queryDevice(deviceAddress) {
     reuseproofs,
   }
   return {
-    noData,
-    device: {
-      address: deviceAddress,
-      impact: getDeviceImpact(proofs),
-      proofs,
-    },
+    address: deviceAddress,
+    impact: getDeviceImpact(proofs),
+    proofs,
   }
 }
 
@@ -96,21 +94,19 @@ async function queryUser(userAddress) {
     ]),
   ]
 
-  const noData = deviceAddresses.length === 0
+  if (deviceAddresses.length === 0) return null
 
   const devices = []
   for (const deviceAddress of deviceAddresses) {
-    const { device } = await queryDevice(deviceAddress)
+    const device = await queryDevice(deviceAddress)
+    if (!device) continue
     devices.push(device)
   }
 
   return {
-    noData,
-    user: {
-      address: userAddress,
-      impact: getUserImpact(devices),
-      devices,
-    },
+    address: userAddress,
+    impact: getUserImpact(devices),
+    devices,
   }
 }
 
