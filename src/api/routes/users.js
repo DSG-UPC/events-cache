@@ -5,6 +5,29 @@ const { BadRequest, NotFound } = require("../utils/errors")
 
 const app = express()
 
+/**
+ * @swagger
+ *
+ * paths:
+ *   /api/users/{userAddress}:
+ *     get:
+ *       parameters:
+ *         - in: path
+ *           name: userAddress
+ *           required: true
+ *           type: string
+ *           description: Ethereum address.
+ *       responses:
+ *         200:
+ *           description: Success
+ *         400:
+ *           description: Bad request
+ *         404:
+ *           description: Resource not found
+ *         500:
+ *           description: Internal error
+ *
+ */
 app.get("/:userAddress", async (req, res, next) => {
   try {
     const userAddress = req.params.userAddress

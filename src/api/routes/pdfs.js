@@ -14,6 +14,29 @@ require("dotenv").config()
 
 const app = express()
 
+/**
+ * @swagger
+ *
+ * paths:
+ *   /api/pdfs/devices/{deviceAddress}:
+ *     get:
+ *       parameters:
+ *         - in: path
+ *           name: deviceAddress
+ *           required: true
+ *           type: string
+ *           description: Ethereum address.
+ *       responses:
+ *         200:
+ *           description: Success
+ *         400:
+ *           description: Bad request
+ *         404:
+ *           description: Resource not found
+ *         500:
+ *           description: Internal error
+ *
+ */
 app.get("/devices/:deviceAddress", async (req, res, next) => {
   try {
     const deviceAddress = req.params.deviceAddress
@@ -22,9 +45,9 @@ app.get("/devices/:deviceAddress", async (req, res, next) => {
       throw new BadRequest("Wrong address")
     }
 
-    const { noData, device } = await queryDevice(deviceAddress)
+    const device = await queryDevice(deviceAddress)
 
-    if (noData) throw new NotFound("Device not found")
+    if (!device) throw new NotFound("Device not found")
 
     ejs.renderFile(
       path.join(__dirname, "../pdf/devicetemplate.ejs"),
@@ -78,9 +101,9 @@ app.get("/users/:userAddress", async (req, res, next) => {
       throw new BadRequest("Wrong address")
     }
 
-    const { noData, user } = await queryUser(userAddress)
+    const user = await queryUser(userAddress)
 
-    if (noData) throw new NotFound("Data not found for this device address")
+    if (!user) throw new NotFound("User not found")
 
     ejs.renderFile(
       path.join(__dirname, "../pdf/usertemplate.ejs"),

@@ -21,7 +21,6 @@ app.use((req, res, next) => {
   )
   next()
 })
-// app.use(cors())
 app.use("/api", require("./routes"))
 app.use(handleErrors)
 
