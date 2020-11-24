@@ -1,6 +1,6 @@
 const sql = require("../../db")
 const getDeviceImpact = require("./getDeviceImpact")
-const getUserImpact = require("./getUserImpact")
+const getDevicesImpact = require("./getDevicesImpact")
 
 async function queryDevice(deviceAddress) {
   const device = (
@@ -52,6 +52,51 @@ async function queryDevice(deviceAddress) {
 }
 
 async function queryUser(userAddress) {
+  // Proofs count
+  const recycleProofs = +(
+    await sql.query(
+      "select count(*) from recycleproofs where useraddress = $1",
+      [userAddress]
+    )
+  ).rows[0].count
+  const functionProofs = +(
+    await sql.query(
+      "select count(*) from functionproofs where useraddress = $1",
+      [userAddress]
+    )
+  ).rows[0].count
+  const transferProofs = +(
+    await sql.query(
+      "select count(*) from transferproofs where receiveraddress = $1 or supplieraddress = $1",
+      [userAddress]
+    )
+  ).rows[0].count
+  const datawipeProofs = +(
+    await sql.query(
+      "select count(*) from datawipeproofs where useraddress = $1",
+      [userAddress]
+    )
+  ).rows[0].count
+  const reuseProofs = +(
+    await sql.query("select count(*) from reuseproofs where useraddress = $1", [
+      userAddress,
+    ])
+  ).rows[0].count
+  const proofs = {
+    total:
+      recycleProofs +
+      functionProofs +
+      transferProofs +
+      datawipeProofs +
+      reuseProofs,
+    recycleProofs,
+    functionProofs,
+    transferProofs,
+    datawipeProofs,
+    reuseProofs,
+  }
+
+  // Devices
   const recycleDevices = (
     await sql.query(
       "select distinct deviceAddress from recycleproofs where useraddress = $1",
@@ -105,9 +150,61 @@ async function queryUser(userAddress) {
 
   return {
     address: userAddress,
-    impact: getUserImpact(devices),
+    proofs,
+    impact: getDevicesImpact(devices),
     devices,
   }
 }
 
-module.exports = { queryDevice, queryUser }
+async function queryAll() {
+  // Proofs count
+  const recycleProofs = +(await sql.query("select count(*) from recycleproofs"))
+    .rows[0].count
+  const functionProofs = +(
+    await sql.query("select count(*) from functionproofs")
+  ).rows[0].count
+  const transferProofs = +(
+    await sql.query("select count(*) from transferproofs")
+  ).rows[0].count
+  const datawipeProofs = +(
+    await sql.query("select count(*) from datawipeproofs")
+  ).rows[0].count
+  const reuseProofs = +(await sql.query("select count(*) from reuseproofs"))
+    .rows[0].count
+  const proofs = {
+    total:
+      recycleProofs +
+      functionProofs +
+      transferProofs +
+      datawipeProofs +
+      reuseProofs,
+    recycleProofs,
+    functionProofs,
+    transferProofs,
+    datawipeProofs,
+    reuseProofs,
+  }
+
+  // Devices
+  const deviceAddresses = (
+    await sql.query("select address from devices")
+  ).rows.map((device) => device.address)
+
+  if (deviceAddresses.length === 0) return null
+
+  const devices = []
+  for (const deviceAddress of deviceAddresses) {
+    const device = await queryDevice(deviceAddress)
+    if (!device) continue
+    devices.push(device)
+  }
+
+  return {
+    addresses: deviceAddresses,
+    proofs,
+    impact: getDevicesImpact(devices),
+    devices,
+  }
+}
+
+module.exports = { queryDevice, queryUser, queryAll }

@@ -1,6 +1,6 @@
 const getDeviceImpact = require("./getDeviceImpact")
 
-function getUserImpact(devices) {
+function getDevicesImpact(devices) {
   let totalExtendedUsage = 0
   for (const device of devices) {
     const { extendedUsage } = getDeviceImpact(device.proofs)
@@ -9,4 +9,4 @@ function getUserImpact(devices) {
   return { totalExtendedUsage }
 }
 
-module.exports = getUserImpact
+module.exports = getDevicesImpact
