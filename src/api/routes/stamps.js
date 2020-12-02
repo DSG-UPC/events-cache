@@ -1,7 +1,9 @@
 const express = require("express")
 const ethers = require("ethers")
 const nodemailer = require("nodemailer")
-const { BadRequest } = require("../utils/errors")
+const { BadRequest, NotFound } = require("../utils/errors")
+const { stampProof } = require("../../events/events")
+require("dotenv").config()
 
 const app = express()
 
@@ -13,8 +15,8 @@ const isValidSHA3 = (hash) => {
   if (typeof hash !== "string") return false
   return hash.match("^[a-fA-F0-9]{64}$")
 }
-const isValidToken = (token) => {
-  if (typeof token !== "string") return false
+const isValidURL = (url) => {
+  if (typeof url !== "string") return false
   return true
 }
 const isValidEmail = (email) => {
@@ -22,12 +24,12 @@ const isValidEmail = (email) => {
   return true
 }
 
-const sendEmail = async (email, hash, token) => {
+const sendEmail = async (email, hash, timestamp) => {
   const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
-      user: "",
-      pass: "",
+      user: process.env.GMAIL_USER,
+      pass: process.env.GMAIL_PASS,
     },
   })
 
@@ -35,7 +37,7 @@ const sendEmail = async (email, hash, token) => {
     from: "eReuse blockchain", // sender address
     to: email, // list of receivers
     subject: "Report Stamped ✔", // Subject line
-    html: `<h3>Your report has been stamped</h3><p>You used token 0x${token}.</p><p>Visit <a href="http://localhost:3000/check-stamps">our website</a> to check the stamp.</p>`, // html body
+    html: `<h3>Your report has been stamped</h3><p>hash: ${hash}, timestamp: ${timestamp}</p>`, // html body
   }
   try {
     const info = await transporter.sendMail(mailOptions)
@@ -48,28 +50,51 @@ const sendEmail = async (email, hash, token) => {
 
 app.post("/create", async (req, res, next) => {
   const hash = req.body.hash
-  const token = req.body.token
+  const url = req.body.url
   const email = req.body.email
-  console.log(hash)
   try {
     if (!isValidSHA3(hash)) throw new BadRequest("Invalid Hash")
-    if (!isValidToken(token)) throw new BadRequest("Invalid Token")
+    if (!isValidURL(url)) throw new BadRequest("Invalid Verification URL")
     if (!isValidEmail(email)) throw new BadRequest("Invalid Email")
 
-    const signer = new ethers.providers.JsonRpcProvider().getSigner()
-    const stampProof = new ethers.Contract(
-      "0xAE135bE1A8ab17aF2F92EdFb7Bf67d4e29623865",
+    const provider = new ethers.providers.JsonRpcProvider()
+    await provider.getNetwork() // Stops if ethereum network not detected
+    const signer = provider.getSigner()
+    const stampProofsContract = new ethers.Contract(
+      stampProof.filter.address,
       require("../../events/abi/StampProofs.json").abi,
       signer
     )
 
-    stampProof.setProof(`0x${hash}`)
+    stampProofsContract.setProof(`0x${hash}`)
 
-    const r = sendEmail(email, hash, token)
+    // Stop execution until stampProof event detected. TODO: make asynchronous
+    provider.once(
+      {
+        address: "0xAE135bE1A8ab17aF2F92EdFb7Bf67d4e29623865",
+        topics: [
+          ethers.utils.id("stampProof(bytes32,uint256)"),
+          ethers.utils.hexZeroPad(`0x${hash}`),
+        ],
+      },
+      async (log) => {
+        const event = stampProof.iface.parseLog(log).args
+        const emailSent = await sendEmail(
+          email,
+          event.hash,
+          event.timestamp.toNumber()
+        )
 
-    res.json({
-      status: r ? "success" : "error",
-    })
+        res.json({
+          status: "success",
+          data: {
+            hash: event.hash,
+            timestamp: event.timestamp.toNumber(),
+            emailSent: emailSent ? "success" : "error",
+          },
+        })
+      }
+    )
   } catch (error) {
     next(error)
   }
@@ -77,10 +102,11 @@ app.post("/create", async (req, res, next) => {
 
 app.post("/check", async (req, res, next) => {
   const hash = req.body.hash
-  console.log(hash)
   try {
     if (!isValidSHA3(hash)) throw new BadRequest("Invalid Hash")
+
     const provider = new ethers.providers.JsonRpcProvider()
+    await provider.getNetwork() // Stops if ethereum network not detected
     const logs = await provider.getLogs({
       fromBlock: 0,
       topics: [
@@ -89,17 +115,15 @@ app.post("/check", async (req, res, next) => {
       ],
     })
 
-    console.log(logs)
-
     if (logs.length === 0)
-      throw new BadRequest("No stamps found for this document")
+      throw new NotFound("No stamps found for this document")
 
-    let index = 0
-    const events = logs.map((log) => {
-      ++index
+    // let index = 0
+    const stamps = logs.map((log) => {
+      // ++index
       const event = iface.parseLog(log).args
       return {
-        i: index,
+        // i: index,
         hash: event.hash.substring(2),
         date: new Date(event.timestamp.toNumber() * 1000),
       }
@@ -108,7 +132,7 @@ app.post("/check", async (req, res, next) => {
     res.json({
       status: "success",
       data: {
-        events,
+        stamps,
       },
     })
   } catch (error) {

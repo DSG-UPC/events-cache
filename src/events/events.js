@@ -5,8 +5,19 @@ const depositDeviceIface = new ethers.utils.Interface(
 const deviceFactoryIface = new ethers.utils.Interface(
   require("./abi/DeviceFactory.json").abi
 )
+const stampProofsIface = new ethers.utils.Interface(
+  require("./abi/StampProofs.json").abi
+)
 
 module.exports = {
+  stampProof: {
+    name: "stampProof",
+    iface: stampProofsIface,
+    filter: {
+      address: "0xAE135bE1A8ab17aF2F92EdFb7Bf67d4e29623865",
+      topics: [ethers.utils.id("stampProof(bytes32,uint256)")],
+    },
+  },
   deviceCreated: {
     name: "deviceCreated",
     iface: deviceFactoryIface,
