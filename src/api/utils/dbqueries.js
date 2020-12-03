@@ -207,4 +207,17 @@ async function queryAll() {
   }
 }
 
-module.exports = { queryDevice, queryUser, queryAll }
+async function queryStamp(hash) {
+  // hash is a 64 char string (without 0x prefix)
+  const stamps = (
+    await sql.query("select * from stamps where hash = $1", [hash])
+  ).rows.map((stamp) => {
+    return {
+      hash: stamp.hash,
+      date: new Date(stamp.timestamp * 1000),
+    }
+  })
+  return stamps
+}
+
+module.exports = { queryDevice, queryUser, queryAll, queryStamp }

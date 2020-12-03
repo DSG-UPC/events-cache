@@ -8,6 +8,9 @@ class GeneralError extends Error {
     if (this instanceof BadRequest) {
       return 400
     }
+    if (this instanceof Forbidden) {
+      return 403
+    }
     if (this instanceof NotFound) {
       return 404
     }
@@ -17,9 +20,11 @@ class GeneralError extends Error {
 
 class BadRequest extends GeneralError {}
 class NotFound extends GeneralError {}
+class Forbidden extends GeneralError {}
 
 module.exports = {
   GeneralError,
   BadRequest,
   NotFound,
+  Forbidden,
 }
