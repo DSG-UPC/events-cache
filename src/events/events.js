@@ -14,7 +14,7 @@ module.exports = {
     name: "stampProof",
     iface: stampProofsIface,
     filter: {
-      address: "0xAE135bE1A8ab17aF2F92EdFb7Bf67d4e29623865",
+      address: "0xAE135bE1A8ab17aF2F92EdFb7Bf67d4e29623865", // not necessary
       topics: [ethers.utils.id("stampProof(bytes32,uint256)")],
     },
   },

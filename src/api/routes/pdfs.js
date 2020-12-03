@@ -53,7 +53,7 @@ app.get("/devices/:deviceAddress", async (req, res, next) => {
       path.join(__dirname, "../pdf/devicetemplate.ejs"),
       {
         device,
-        validateUrl: `${process.env.FRONTENDURL}/?device=${deviceAddress}`,
+        validateUrl: `${process.env.FRONTEND_ENDPOINT}/?device=${deviceAddress}`,
         date: new Date().toGMTString(),
         helpers: ejsHelpers,
       },
@@ -109,7 +109,7 @@ app.get("/users/:userAddress", async (req, res, next) => {
       path.join(__dirname, "../pdf/usertemplate.ejs"),
       {
         user,
-        validateUrl: `${process.env.FRONTENDURL}/?device=${userAddress}`,
+        validateUrl: `${process.env.FRONTEND_ENDPOINT}/?device=${userAddress}`,
         date: new Date().toGMTString(),
       },
       (err, html) => {

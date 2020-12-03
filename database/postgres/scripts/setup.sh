@@ -73,6 +73,8 @@ psql -d $DB -c "CREATE TABLE ReuseProofs (
         foreign key(deviceAddress) references Devices(address) on delete set null
     );"
 
-
-
-
+psql -d $DB -c "CREATE TABLE stamps (
+        hash    char(64) not null,
+        timestamp integer not null, 
+        primary key (hash, timestamp)
+    );"

@@ -7,31 +7,50 @@ const {
   dataWipeProof,
   reuseProof,
   deviceCreated,
+  stampProof,
 } = require("./events")
 require("dotenv").config()
 
-const bcurl = process.env.BCURL
-const bcport = process.env.BCPORT
-
 const provider = new ethers.providers.JsonRpcProvider(
-  `http://${bcurl}:${bcport}`
+  process.env.BLOCKCHAIN_ENDPOINT
 )
 
 provider
   .getNetwork()
   .then((network) => {
     console.log("> Network: ", network)
-    console.log(`> Listening to events from blockchain at ${bcurl}:${bcport}`)
+    console.log(
+      `> Listening to events from blockchain at ${process.env.BLOCKCHAIN_ENDPOINT}`
+    )
 
-    if (process.env.BCRESET === "true") {
-      console.log("> Starting from block 0\n")
+    if (process.env.BLOCKCHAIN_RESET === "true") {
+      console.log("> Starting from: block 0\n")
       provider.resetEventsBlock(0)
-    } else console.log("> Starting from last block\n")
+    } else console.log("> Starting from: last block\n")
   })
   .catch((err) => {
     console.log(err)
     process.exit(1)
   })
+
+provider.on(stampProof.filter, (log) => {
+  const event = stampProof.iface.parseLog(log).args
+  const data = {
+    hash: event.hash.substring(2),
+    timestamp: event.timestamp.toNumber(),
+  }
+
+  sql
+    .query("INSERT INTO stamps VALUES($1, $2)", [data.hash, data.timestamp])
+    .then((res) => {
+      console.log("stampProof: ", data)
+      console.log(`Inserted into stamps table: ${res.rowCount} row(s)`, "\n")
+    })
+    .catch((err) => {
+      console.log("stampProof", data)
+      console.log("Insert failed: ", err.detail, "\n")
+    })
+})
 
 provider.on(deviceCreated.filter, (log) => {
   const event = deviceCreated.iface.parseLog(log).args

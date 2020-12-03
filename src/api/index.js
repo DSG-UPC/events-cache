@@ -3,8 +3,9 @@ const handleErrors = require("./middlewares/handleErrors")
 const bodyParser = require("body-parser")
 require("dotenv").config()
 
-const port = process.env.APIPORT
-const url = process.env.APIURL
+const host = process.env.API_HOST
+const port = process.env.API_PORT
+
 const app = express()
 app.use(bodyParser.json())
 app.use(
@@ -24,8 +25,8 @@ app.use((req, res, next) => {
 app.use("/api", require("./routes"))
 app.use(handleErrors)
 
-const server = app.listen(port, url, () => {
-  console.log(`Listening on ${url}:${port}`)
+const server = app.listen(port, host, () => {
+  console.log(`Listening on ${host}:${port}`)
 })
 
 process.on("SIGTERM", () => {
