@@ -1,17 +1,8 @@
 #!/usr/bin/env bash
 
 DB="metrics"
-USER="postgres"
-PASS="postgres"
 
 createdb $DB
-# psql -d $DB -c "CREATE USER $USER WITH PASSWORD '$PASS';"
-psql -d $DB -c "GRANT ALL PRIVILEGES ON DATABASE $DB TO $USER;"
-# psql -d $DB -c "CREATE EXTENSION pgcrypto SCHEMA public;" # Enable pgcrypto
-# psql -d $DB -c "CREATE EXTENSION ltree SCHEMA public;" # Enable ltree
-# psql -d $DB -c "CREATE EXTENSION citext SCHEMA public;" # Enable citext
-# psql -d $DB -c "CREATE EXTENSION pg_trgm SCHEMA public;" # Enable pg_trgm
-
 
 # psql -d $DB -c "CREATE TABLE Users (
 #         address         varchar(40) PRIMARY KEY
