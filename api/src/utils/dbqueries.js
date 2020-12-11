@@ -1,4 +1,4 @@
-const sql = require("../../db")
+const sql = require("../db")
 const getDeviceImpact = require("./getDeviceImpact")
 const getDevicesImpact = require("./getDevicesImpact")
 

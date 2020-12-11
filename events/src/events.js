@@ -1,20 +1,25 @@
 const ethers = require("ethers")
+require("dotenv").config()
+
 const depositDeviceIface = new ethers.utils.Interface(
-  require("./abi/DepositDevice.json").abi
+  require("./blockchain/abi/DepositDevice.json").abi
 )
 const deviceFactoryIface = new ethers.utils.Interface(
-  require("./abi/DeviceFactory.json").abi
+  require("./blockchain/abi/DeviceFactory.json").abi
 )
 const stampProofsIface = new ethers.utils.Interface(
-  require("./abi/StampProofs.json").abi
+  require("./blockchain/abi/StampProofs.json").abi
 )
 
+const STAMPPROOFS_ADDRESS = process.env.STAMPPROOFS_ADDRESS
+
+// Events objects. Each object is an event. It contains the interface of the smart contract that emits that event and a filter to catch it from index.js.
 module.exports = {
   stampProof: {
     name: "stampProof",
     iface: stampProofsIface,
     filter: {
-      address: "0xAE135bE1A8ab17aF2F92EdFb7Bf67d4e29623865", // not necessary
+      address: STAMPPROOFS_ADDRESS, // not necessary
       topics: [ethers.utils.id("stampProof(bytes32,uint256)")],
     },
   },

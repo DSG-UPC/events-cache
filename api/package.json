@@ -1,0 +1,41 @@
+{
+  "name": "ereports-api",
+  "version": "1.0.0",
+  "description": "Express API that manages access to ereports-postgres",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node ./src/index",
+    "dev": "nodemon ./src/index",
+    "test": "jest",
+    "lint": "eslint . --fix",
+    "prettier": "prettier . --write"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DSG-UPC/events-cache.git"
+  },
+  "author": "Nil Quera",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/DSG-UPC/events-cache/issues"
+  },
+  "homepage": "https://github.com/DSG-UPC/events-cache#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "dotenv": "^8.2.0",
+    "ethers": "^5.0.24",
+    "express": "^4.17.1",
+    "nodemailer": "^6.4.17",
+    "pg": "^8.5.1"
+  },
+  "devDependencies": {
+    "eslint": "^7.15.0",
+    "eslint-config-prettier": "^7.0.0",
+    "eslint-config-standard": "^16.0.2",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "nodemon": "^2.0.6",
+    "prettier": "^2.2.1"
+  }
+}

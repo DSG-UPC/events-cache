@@ -49,21 +49,14 @@
   "ast": {
     "absolutePath": "contracts/proofs/StampProofs.sol",
     "exportedSymbols": {
-      "StampProofs": [
-        7494
-      ]
+      "StampProofs": [7494]
     },
     "id": 7495,
     "nodeType": "SourceUnit",
     "nodes": [
       {
         "id": 7471,
-        "literals": [
-          "solidity",
-          "^",
-          "0.4",
-          ".25"
-        ],
+        "literals": ["solidity", "^", "0.4", ".25"],
         "nodeType": "PragmaDirective",
         "src": "0:24:44"
       },
@@ -74,9 +67,7 @@
         "documentation": null,
         "fullyImplemented": true,
         "id": 7494,
-        "linearizedBaseContracts": [
-          7494
-        ],
+        "linearizedBaseContracts": [7494],
         "name": "StampProofs",
         "nodeType": "ContractDefinition",
         "nodes": [
@@ -342,21 +333,14 @@
   "legacyAST": {
     "absolutePath": "contracts/proofs/StampProofs.sol",
     "exportedSymbols": {
-      "StampProofs": [
-        7494
-      ]
+      "StampProofs": [7494]
     },
     "id": 7495,
     "nodeType": "SourceUnit",
     "nodes": [
       {
         "id": 7471,
-        "literals": [
-          "solidity",
-          "^",
-          "0.4",
-          ".25"
-        ],
+        "literals": ["solidity", "^", "0.4", ".25"],
         "nodeType": "PragmaDirective",
         "src": "0:24:44"
       },
@@ -367,9 +351,7 @@
         "documentation": null,
         "fullyImplemented": true,
         "id": 7494,
-        "linearizedBaseContracts": [
-          7494
-        ],
+        "linearizedBaseContracts": [7494],
         "name": "StampProofs",
         "nodeType": "ContractDefinition",
         "nodes": [

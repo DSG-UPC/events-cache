@@ -1,5 +1,5 @@
 const ethers = require("ethers")
-const sql = require("../db")
+const sql = require("./db")
 const {
   recycleProof,
   functionProof,

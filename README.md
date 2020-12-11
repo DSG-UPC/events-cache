@@ -1,17 +1,23 @@
 # events-cache
 
-Service that subscribes to certain blockchain events and stores them in a database. On the other side, it exposes this data with a basic API.
+This repository contains three different things:
+
+- ereports-postgres: a postgres database. Files are in [database folder](database).
+- ereports-events: a service that subscribes to eReuse-Blockchain events and saves them to ereports-postgres. Files are in [events](events).
+- ereports-api: an HTTP API that serves database content and manages stamps. Files can be found in [api](api).
 
 ## Install
 
-Run `npm install` to install the dependencies. Also, `cp .env.example .env` and fill the fields with your postgres, blockchain and api parameters.
+Ereports-api and ereports-events are npm projects, which means they can be installed and executed following the conventional steps:
+
+Inside one of the projects folders, run `npm install` to install the dependencies. Also, `cp .env.example .env` and fill the fields.
 
 Refer to [database README](database/README.md) for instructions on how to set up the postgres database.
 
 ## Execution
 
-Run `npm run events` to execute events logging service, which subscribes to certain events and stores them in the postgres database.
-Run `npm run api` to run the api.
+Both ereports-api and ereports-events have development scripts in package.json.
+Run `npm start` to execute a single time or `npm run dev` to reload every time a file changes.
 
 ## What does it do?
 

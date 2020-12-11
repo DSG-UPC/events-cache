@@ -122,21 +122,14 @@
   "ast": {
     "absolutePath": "/home/nilquera/Documents/TFG/eReuse/blockchain-dev/fork/eReuse-Blockchain/contracts/devices/DeviceFactory.sol",
     "exportedSymbols": {
-      "DeviceFactory": [
-        1713
-      ]
+      "DeviceFactory": [1713]
     },
     "id": 1714,
     "nodeType": "SourceUnit",
     "nodes": [
       {
         "id": 1542,
-        "literals": [
-          "solidity",
-          "^",
-          "0.4",
-          ".25"
-        ],
+        "literals": ["solidity", "^", "0.4", ".25"],
         "nodeType": "PragmaDirective",
         "src": "0:24:6"
       },
@@ -175,16 +168,12 @@
       },
       {
         "baseContracts": [],
-        "contractDependencies": [
-          6410
-        ],
+        "contractDependencies": [6410],
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": true,
         "id": 1713,
-        "linearizedBaseContracts": [
-          1713
-        ],
+        "linearizedBaseContracts": [1713],
         "name": "DeviceFactory",
         "nodeType": "ContractDefinition",
         "nodes": [
@@ -464,9 +453,7 @@
               "src": "603:281:6",
               "statements": [
                 {
-                  "assignments": [
-                    1580
-                  ],
+                  "assignments": [1580],
                   "declarations": [
                     {
                       "constant": false,
@@ -1219,9 +1206,7 @@
               "src": "1113:410:6",
               "statements": [
                 {
-                  "assignments": [
-                    1631
-                  ],
+                  "assignments": [1631],
                   "declarations": [
                     {
                       "constant": false,
@@ -1891,9 +1876,7 @@
                   },
                   "id": 1688,
                   "initializationExpression": {
-                    "assignments": [
-                      1638
-                    ],
+                    "assignments": [1638],
                     "declarations": [
                       {
                         "constant": false,
@@ -2297,21 +2280,14 @@
   "legacyAST": {
     "absolutePath": "/home/nilquera/Documents/TFG/eReuse/blockchain-dev/fork/eReuse-Blockchain/contracts/devices/DeviceFactory.sol",
     "exportedSymbols": {
-      "DeviceFactory": [
-        1713
-      ]
+      "DeviceFactory": [1713]
     },
     "id": 1714,
     "nodeType": "SourceUnit",
     "nodes": [
       {
         "id": 1542,
-        "literals": [
-          "solidity",
-          "^",
-          "0.4",
-          ".25"
-        ],
+        "literals": ["solidity", "^", "0.4", ".25"],
         "nodeType": "PragmaDirective",
         "src": "0:24:6"
       },
@@ -2350,16 +2326,12 @@
       },
       {
         "baseContracts": [],
-        "contractDependencies": [
-          6410
-        ],
+        "contractDependencies": [6410],
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": true,
         "id": 1713,
-        "linearizedBaseContracts": [
-          1713
-        ],
+        "linearizedBaseContracts": [1713],
         "name": "DeviceFactory",
         "nodeType": "ContractDefinition",
         "nodes": [
@@ -2639,9 +2611,7 @@
               "src": "603:281:6",
               "statements": [
                 {
-                  "assignments": [
-                    1580
-                  ],
+                  "assignments": [1580],
                   "declarations": [
                     {
                       "constant": false,
@@ -3394,9 +3364,7 @@
               "src": "1113:410:6",
               "statements": [
                 {
-                  "assignments": [
-                    1631
-                  ],
+                  "assignments": [1631],
                   "declarations": [
                     {
                       "constant": false,
@@ -4066,9 +4034,7 @@
                   },
                   "id": 1688,
                   "initializationExpression": {
-                    "assignments": [
-                      1638
-                    ],
+                    "assignments": [1638],
                     "declarations": [
                       {
                         "constant": false,

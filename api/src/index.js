@@ -13,6 +13,7 @@ app.use(
     extended: true,
   })
 )
+
 app.use((req, res, next) => {
   // allow CORS
   res.header("Access-Control-Allow-Origin", "*")
@@ -25,18 +26,6 @@ app.use((req, res, next) => {
 app.use("/api", require("./routes"))
 app.use(handleErrors)
 
-const server = app.listen(port, host, () => {
-  console.log(`Listening on ${host}:${port}`)
-})
-
-process.on("SIGTERM", () => {
-  server.close(() => {
-    console.log("\nProcess terminated")
-  })
-})
-
-process.on("SIGINT", () => {
-  server.close(() => {
-    console.log("\nProcess terminated")
-  })
+app.listen(port, host, () => {
+  console.log(`Listening on http://${host}:${port}`)
 })

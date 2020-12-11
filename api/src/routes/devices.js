@@ -5,29 +5,6 @@ const { queryDevice, queryAll } = require("../utils/dbqueries")
 
 const app = express()
 
-/**
- * @swagger
- *
- * paths:
- *   /api/devices/{deviceAddress}:
- *     get:
- *       parameters:
- *         - in: path
- *           name: deviceAddress
- *           required: true
- *           type: string
- *           description: Ethereum address.
- *       responses:
- *         200:
- *           description: Success
- *         400:
- *           description: Bad request
- *         404:
- *           description: Resource not found
- *         500:
- *           description: Internal error
- *
- */
 app.get("/:deviceAddress", async (req, res, next) => {
   try {
     const deviceAddress = req.params.deviceAddress

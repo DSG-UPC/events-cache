@@ -1,0 +1,38 @@
+{
+  "name": "ereports-events",
+  "version": "1.0.0",
+  "description": "Service that subscribes to eReuse-Blockchain and saves data in ereports-postgres",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node ./src/index",
+    "dev": "nodemon ./src/index",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint . --fix",
+    "prettier": "prettier . --write"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DSG-UPC/events-cache.git"
+  },
+  "author": "Nil Quera",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/DSG-UPC/events-cache/issues"
+  },
+  "homepage": "https://github.com/DSG-UPC/events-cache#readme",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "ethers": "^5.0.24",
+    "pg": "^8.5.1"
+  },
+  "devDependencies": {
+    "eslint": "^7.15.0",
+    "eslint-config-prettier": "^7.0.0",
+    "eslint-config-standard": "^16.0.2",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "nodemon": "^2.0.6",
+    "prettier": "^2.2.1"
+  }
+}

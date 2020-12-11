@@ -2,16 +2,15 @@ const express = require("express")
 const ethers = require("ethers")
 const nodemailer = require("nodemailer")
 const { BadRequest, NotFound, Forbidden } = require("../utils/errors")
-const { stampProof } = require("../../events/events")
 const { queryStamp } = require("../utils/dbqueries")
-const fetch = require("node-fetch")
 require("dotenv").config()
 
 const app = express()
 
-const iface = new ethers.utils.Interface(
-  require("../../events/abi/StampProofs.json").abi
+const stampProofsIface = new ethers.utils.Interface( // Used to parse events
+  require("../blockchain/abi/StampProofs.json").abi
 )
+const STAMPPROOFS_ADDRESS = process.env.STAMPPROOFS_ADDRESS
 
 const isValidSHA3 = (hash) => {
   if (typeof hash !== "string") return false
@@ -81,8 +80,8 @@ app.post("/create", async (req, res, next) => {
     await provider.getNetwork() // Stops if ethereum network not detected
     const signer = provider.getSigner()
     const stampProofsContract = new ethers.Contract(
-      stampProof.filter.address,
-      require("../../events/abi/StampProofs.json").abi,
+      STAMPPROOFS_ADDRESS,
+      require("../blockchain/abi/StampProofs.json").abi,
       signer
     )
 
@@ -91,14 +90,14 @@ app.post("/create", async (req, res, next) => {
     // Stop execution until stampProof event detected. TODO: make asynchronous
     provider.once(
       {
-        address: "0xAE135bE1A8ab17aF2F92EdFb7Bf67d4e29623865",
+        address: STAMPPROOFS_ADDRESS,
         topics: [
           ethers.utils.id("stampProof(bytes32,uint256)"),
           ethers.utils.hexZeroPad(`0x${hash}`),
         ],
       },
       async (log) => {
-        const event = stampProof.iface.parseLog(log).args
+        const event = stampProofsIface.parseLog(log).args
         const emailSent = await sendEmail(
           email,
           event.hash,
@@ -127,7 +126,7 @@ app.post("/check", async (req, res, next) => {
 
     let stamps = await queryStamp(hash)
     if (!stamps) {
-      // If no stamps found in DB, try looking at blockchain
+      // If no stamps found in DB, try looking at the blockchain
       const provider = new ethers.providers.JsonRpcProvider()
       await provider.getNetwork() // Stops if ethereum network not detected
       const logs = await provider.getLogs({
@@ -142,7 +141,7 @@ app.post("/check", async (req, res, next) => {
         throw new NotFound("No stamps found for this document")
 
       stamps = logs.map((log) => {
-        const event = iface.parseLog(log).args
+        const event = stampProofsIface.parseLog(log).args
         return {
           hash: event.hash.substring(2),
           date: new Date(event.timestamp.toNumber() * 1000),
