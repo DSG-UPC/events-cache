@@ -31,6 +31,7 @@ app.get("/:deviceAddress", async (req, res, next) => {
 app.get("/", async (req, res, next) => {
   try {
     const all = await queryAll()
+    if (!all) throw new NotFound("Devices not found")
     return res.json({
       status: "success",
       data: { all },

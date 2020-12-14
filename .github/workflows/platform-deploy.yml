@@ -1,0 +1,73 @@
+name: CI/CD
+
+on:
+  push:
+    branches: [deploy]
+
+jobs:
+  api_build_and_publish:
+    name: Build ereports-api image and push it to Docker Hub
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Use Node.js 15.4.0
+        uses: actions/setup-node@v1
+        with:
+          node-version: "15.4.0"
+
+      - run: npm ci
+
+      - name: Run tests
+        run: npm test
+
+      - name: Build image and Push to Docker Hub
+        uses: docker/build-push-action@v1
+        with:
+          file: api/Dockerfile
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_TOKEN }}
+          repository: nilquera/ereports-api
+          tags: latest
+  events_build_and_publish:
+    name: Build ereports-events image and push it to Docker Hub
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Use Node.js 15.4.0
+        uses: actions/setup-node@v1
+        with:
+          node-version: "15.4.0"
+
+      - run: npm ci
+
+      - name: Run tests
+        run: npm test
+
+      - name: Build image and Push to Docker Hub
+        uses: docker/build-push-action@v1
+        with:
+          file: events/Dockerfile
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_TOKEN }}
+          repository: nilquera/ereports-events
+          tags: latest
+  postgres_build_and_publish:
+    name: Build ereports-postgres image and push it to Docker Hub
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Build image and Push to Docker Hub
+        uses: docker/build-push-action@v1
+        with:
+          file: database/Dockerfile
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_TOKEN }}
+          repository: nilquera/ereports-api
+          tags: latest

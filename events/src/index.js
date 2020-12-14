@@ -9,11 +9,12 @@ const {
   deviceCreated,
   stampProof,
 } = require("./events")
-require("dotenv").config()
 
 const provider = new ethers.providers.JsonRpcProvider(
   process.env.BLOCKCHAIN_ENDPOINT
 )
+
+console.log(process.env.BLOCKCHAIN_ENDPOINT)
 
 provider
   .getNetwork()

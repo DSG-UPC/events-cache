@@ -1,7 +1,6 @@
 const { Client } = require("pg")
-require("dotenv").config()
 
-const client = new Client()
+const client = new Client({ query_timeout: 10000 })
 
 const connect = async () => {
   try {

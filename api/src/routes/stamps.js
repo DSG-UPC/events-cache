@@ -3,7 +3,6 @@ const ethers = require("ethers")
 const nodemailer = require("nodemailer")
 const { BadRequest, NotFound, Forbidden } = require("../utils/errors")
 const { queryStamp } = require("../utils/dbqueries")
-require("dotenv").config()
 
 const app = express()
 

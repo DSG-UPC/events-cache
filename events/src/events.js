@@ -1,5 +1,4 @@
 const ethers = require("ethers")
-require("dotenv").config()
 
 const depositDeviceIface = new ethers.utils.Interface(
   require("./blockchain/abi/DepositDevice.json").abi

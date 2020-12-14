@@ -1,7 +1,6 @@
 const express = require("express")
 const handleErrors = require("./middlewares/handleErrors")
 const bodyParser = require("body-parser")
-require("dotenv").config()
 
 const host = process.env.API_HOST
 const port = process.env.API_PORT
