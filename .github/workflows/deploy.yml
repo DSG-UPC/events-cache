@@ -24,15 +24,11 @@ jobs:
       - name: Run tests
         run: npm test
         working-directory: ./api
-      
-      - name: Teststep
-        run: |
-          ls ./api
 
       - name: Build image and Push to Docker Hub
         uses: docker/build-push-action@v1
         with:
-          file: ./api/Dockerfile
+          file: ./api
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_TOKEN }}
           repository: nilquera/ereports-api
@@ -57,16 +53,11 @@ jobs:
       - name: Run tests
         working-directory: ./events
         run: npm test
-
-      
-      - name: Teststep
-        run: |
-          ls
           
       - name: Build image and Push to Docker Hub
         uses: docker/build-push-action@v1
         with:
-          file: ./events/Dockerfile
+          file: ./events
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_TOKEN }}
           repository: nilquera/ereports-events
@@ -79,15 +70,11 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      
-      - name: Teststep
-        run: |
-          ls
           
       - name: Build image and Push to Docker Hub
         uses: docker/build-push-action@v1
         with:
-          file: ./database/Dockerfile
+          file: ./database
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_TOKEN }}
           repository: nilquera/ereports-postgres
