@@ -2,7 +2,7 @@ name: CI/CD
 
 on:
   push:
-    branches: [deploy]
+    branches: [main]
 
 jobs:
   api_build_and_publish:
@@ -24,6 +24,10 @@ jobs:
       - name: Run tests
         run: npm test
         working-directory: ./api
+      
+      - name: Teststep
+        run: |
+          ls ./api
 
       - name: Build image and Push to Docker Hub
         uses: docker/build-push-action@v1
@@ -54,6 +58,11 @@ jobs:
         working-directory: ./events
         run: npm test
 
+      
+      - name: Teststep
+        run: |
+          ls
+          
       - name: Build image and Push to Docker Hub
         uses: docker/build-push-action@v1
         with:
@@ -69,6 +78,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - uses: actions/checkout@v2
+      
+      - name: Teststep
+        run: |
+          ls
+          
       - name: Build image and Push to Docker Hub
         uses: docker/build-push-action@v1
         with:
