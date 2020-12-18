@@ -1,3 +1,5 @@
+![CI/CD](https://github.com/DSG-UPC/events-cache/workflows/CI/CD/badge.svg?branch=deploy&event=push)
+
 # events-cache
 
 This repository contains three different things:

@@ -55,7 +55,7 @@ app.post("/create", async (req, res, next) => {
   try {
     if (!isValidSHA3(hash)) throw new BadRequest("Invalid Hash")
     if (!isValidURL(url)) throw new BadRequest("Invalid Verification URL")
-    if (!isValidEmail(email)) throw new BadRequest("Invalid Email")
+    // if (!isValidEmail(email)) throw new BadRequest("Invalid Email")
 
     // 1) Stop if hash has already been stamped
     const stamps = await queryStamp(hash)
@@ -97,18 +97,18 @@ app.post("/create", async (req, res, next) => {
       },
       async (log) => {
         const event = stampProofsIface.parseLog(log).args
-        const emailSent = await sendEmail(
-          email,
-          event.hash,
-          event.timestamp.toNumber()
-        )
+        // const emailSent = await sendEmail(
+        //   email,
+        //   event.hash,
+        //   event.timestamp.toNumber()
+        // )
 
         res.json({
           status: "success",
           data: {
             hash: event.hash,
             timestamp: event.timestamp.toNumber(),
-            emailSent: emailSent ? "success" : "error",
+            // emailSent: emailSent ? "success" : "error",
           },
         })
       }
