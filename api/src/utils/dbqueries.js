@@ -220,4 +220,17 @@ async function queryStamp(hash) {
   return stamps
 }
 
-module.exports = { queryDevice, queryUser, queryAll, queryStamp }
+async function queryEndpoints() {
+  const endpoints = (await sql.query("select * from endpoints")).rows.map(
+    (endpoint) => endpoint.url
+  )
+  return endpoints
+}
+
+module.exports = {
+  queryDevice,
+  queryUser,
+  queryAll,
+  queryStamp,
+  queryEndpoints,
+}
