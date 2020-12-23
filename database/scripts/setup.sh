@@ -69,3 +69,10 @@ psql -d $DB -c "CREATE TABLE stamps (
         timestamp integer not null, 
         primary key (hash, timestamp)
     );"
+
+psql -d $DB -c "CREATE TABLE endpoints (
+    url varchar primary key not null
+);"
+
+psql -d $DB -c "INSERT into endpoints values('https://api.testing.usody.com/usodybeta/documents/check/');"
+psql -d $DB -c "INSERT into endpoints values('https://api.usody.com/usody/documents/check/');"

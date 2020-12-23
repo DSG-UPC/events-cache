@@ -2,14 +2,16 @@ version: "3.9"
 services:
   api:
     image: nilquera/ereports-api:latest
+    build: ./api
     container_name: ereports-api-container
     env_file:
       - .env.docker
     ports:
-      - "84.88.85.40:3005:3005"
+      - "127.0.0.1:3005:3005"
   # restart: on-failure
   db:
     image: nilquera/ereports-postgres:latest
+    build: ./database
     container_name: ereports-postgres-container
     ports:
       - "127.0.0.1:5432:5432"
@@ -19,13 +21,15 @@ services:
   # restart: on-failure
   events:
     image: nilquera/ereports-events:latest
+    build: ./events
     container_name: ereports-events-container
     env_file:
       - .env.docker
   # restart: on-failure
   platform:
     image: nilquera/ereports-platform:latest
+    build: ../reports-platform
     container_name: ereports-platform-container
     ports:
-      - "84.88.85.40:8080:80"
+      - "127.0.0.1:8080:80"
   # restart: on-failure

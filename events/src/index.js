@@ -14,8 +14,6 @@ const provider = new ethers.providers.JsonRpcProvider(
   process.env.BLOCKCHAIN_ENDPOINT
 )
 
-console.log(process.env.BLOCKCHAIN_ENDPOINT)
-
 provider
   .getNetwork()
   .then((network) => {
