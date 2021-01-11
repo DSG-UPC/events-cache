@@ -1,4 +1,4 @@
-![CI/CD](https://github.com/DSG-UPC/events-cache/workflows/CI/CD/badge.svg?branch=deploy&event=push)
+![CI/CD](https://github.com/DSG-UPC/events-cache/workflows/CI/CD/badge.svg)
 
 # events-cache
 
