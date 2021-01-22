@@ -105,23 +105,23 @@ app.post("/create", async (req, res, next) => {
     console.log("Transaction sent")
 
     // 4) Provisional step 4: avoid ereports-events; store hash in database and send API response
-    const timestamp = +new Date()
+    const timestamp = Math.floor(+new Date() / 1000)
     sql
       .query("INSERT INTO stamps VALUES($1, $2)", [hash, timestamp])
       .then((res) => {
         console.log(`Inserted into stamps table: ${res.rowCount} row(s)`, "\n")
-        res.json({
-          status: "success",
-          data: {
-            hash: hash,
-            timestamp: timestamp,
-            // emailSent: emailSent ? "success" : "error",
-          },
-        })
       })
       .catch((err) => {
         console.log("Insert failed: ", err.detail, "\n")
       })
+    res.json({
+      status: "success",
+      data: {
+        hash: hash,
+        timestamp: timestamp,
+        // emailSent: emailSent ? "success" : "error",
+      },
+    })
 
     // 4) Stop execution until stampProof event detected. TODO: make asynchronous
     /*     provider.once(
