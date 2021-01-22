@@ -1,6 +1,8 @@
 const express = require("express")
 const ethers = require("ethers")
 const nodemailer = require("nodemailer")
+const sql = require("../db")
+
 const {
   BadRequest,
   NotFound,
@@ -92,7 +94,6 @@ app.post("/create", async (req, res, next) => {
       process.env.BLOCKCHAIN_ENDPOINT
     )
 
-    console.log(await provider.listAccounts())
     await provider.getNetwork() // Stops if ethereum network not detected
     const signer = provider.getSigner()
     const stampProofsContract = new ethers.Contract(
@@ -101,9 +102,31 @@ app.post("/create", async (req, res, next) => {
       signer
     )
     stampProofsContract.setProof(`0x${hash}`)
+    console.log("Transaction sent")
+
+    // 4) Provisional step 4: avoid ereports-events; store hash in database and send API response
+    const timestamp = +new Date()
+    sql
+      .query("INSERT INTO stamps VALUES($1, $2)", [hash, timestamp])
+      .then((res) => {
+        console.log("stampProof: ", data)
+        console.log(`Inserted into stamps table: ${res.rowCount} row(s)`, "\n")
+        res.json({
+          status: "success",
+          data: {
+            hash: hash,
+            timestamp: timestamp,
+            // emailSent: emailSent ? "success" : "error",
+          },
+        })
+      })
+      .catch((err) => {
+        console.log("stampProof", data)
+        console.log("Insert failed: ", err.detail, "\n")
+      })
 
     // 4) Stop execution until stampProof event detected. TODO: make asynchronous
-    provider.once(
+    /*     provider.once(
       {
         address: STAMPPROOFS_ADDRESS,
         topics: [
@@ -128,7 +151,7 @@ app.post("/create", async (req, res, next) => {
           },
         })
       }
-    )
+    ) */
   } catch (error) {
     next(error)
   }
