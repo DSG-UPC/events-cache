@@ -109,7 +109,6 @@ app.post("/create", async (req, res, next) => {
     sql
       .query("INSERT INTO stamps VALUES($1, $2)", [hash, timestamp])
       .then((res) => {
-        console.log("stampProof: ", data)
         console.log(`Inserted into stamps table: ${res.rowCount} row(s)`, "\n")
         res.json({
           status: "success",
@@ -121,7 +120,6 @@ app.post("/create", async (req, res, next) => {
         })
       })
       .catch((err) => {
-        console.log("stampProof", data)
         console.log("Insert failed: ", err.detail, "\n")
       })
 
