@@ -94,7 +94,7 @@ app.post("/create", async (req, res, next) => {
 
     console.log(await provider.listAccounts())
     await provider.getNetwork() // Stops if ethereum network not detected
-    const signer = provider.getSigner(process.env.ADDRESS)
+    const signer = provider.getSigner()
     const stampProofsContract = new ethers.Contract(
       STAMPPROOFS_ADDRESS,
       require("../blockchain/abi/StampProofs.json").abi,
