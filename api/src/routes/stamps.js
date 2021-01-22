@@ -88,7 +88,11 @@ app.post("/create", async (req, res, next) => {
     }
 
     // 3) Connect to blockchain and stamp hash
-    const provider = new ethers.providers.JsonRpcProvider()
+    const provider = new ethers.providers.JsonRpcProvider(
+      process.env.BLOCKCHAIN_ENDPOINT
+    )
+
+    console.log(await provider.listAccounts())
     await provider.getNetwork() // Stops if ethereum network not detected
     const signer = provider.getSigner()
     const stampProofsContract = new ethers.Contract(
@@ -138,7 +142,9 @@ app.post("/check", async (req, res, next) => {
     let stamps = await queryStamp(hash)
     if (stamps.length === 0) {
       // If no stamps found in DB, try looking at the blockchain
-      const provider = new ethers.providers.JsonRpcProvider()
+      const provider = new ethers.providers.JsonRpcProvider(
+        process.env.BLOCKCHAIN_ENDPOINT
+      )
       await provider.getNetwork() // Stops if ethereum network not detected
       const logs = await provider.getLogs({
         fromBlock: 0,
